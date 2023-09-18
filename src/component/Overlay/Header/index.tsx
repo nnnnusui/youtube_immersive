@@ -44,12 +44,19 @@ export const Header = (p: {
         setAllowPointerEvent(true);
         hideOriginalHeader.mount();
       };
-      hideOriginalHeader.ref()?.addEventListener("focusout", () => {
+      let innerClicked = false;
+      const documentClick = (event: MouseEvent) => {
+        const isContains = hideOriginalHeader.ref()?.contains(event.target as HTMLElement);
+        if (isContains) {
+          innerClicked = true;
+          return;
+        }
         hideCallback();
-      }, { once: true });
+        document.removeEventListener("click", documentClick);
+      };
+      document.addEventListener("click", documentClick);
       hideOriginalHeader.ref()?.addEventListener("mouseleave", () => {
-        const isFocused = hideOriginalHeader.ref()?.contains(document.activeElement);
-        if (isFocused) return;
+        if (innerClicked) return;
         hideCallback();
       }, { once: true });
     },
