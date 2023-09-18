@@ -38,6 +38,7 @@ export const Header = (p: {
       it?.classList.remove(styles.HideToTop);
       if (!inTheater()) return;
 
+      setDisplayingPullTab(false);
       const hideCallback = () => {
         setHeaderHided(true);
         setAllowPointerEvent(true);
