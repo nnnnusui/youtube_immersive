@@ -34,7 +34,11 @@ const createInTheater = () => {
   return inTheater;
 };
 
+const inTheater = createRoot(createInTheater);
+
 /**
  * Indicates "displaying" video in theater mode.
  */
-export const useInTheater = createRoot(createInTheater);
+export const useInTheater = () => {
+  return inTheater;
+};

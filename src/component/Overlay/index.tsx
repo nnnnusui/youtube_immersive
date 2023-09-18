@@ -14,7 +14,7 @@ import { useInTheater } from "@/fn/state/useInTheater";
 import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Overlay = (): JSX.Element => {
-  const inTheater = useInTheater;
+  const inTheater = useInTheater();
   useElementRef("body", {
     onMount: (it) => it?.classList.add(styles.YouTubeImmersive),
     onCleanup: (it) => it?.classList.remove(styles.YouTubeImmersive),

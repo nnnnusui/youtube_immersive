@@ -1,69 +1,58 @@
 import clsx from "clsx";
 import {
-  JSX, createEffect, createSignal, onMount, Show, untrack, ComponentProps,
+  JSX, createSignal, Show, ComponentProps, createEffect,
 } from "solid-js";
 
 import styles from "./Header.module.styl";
 
-import { querySelectHtmlElements, querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
-import { setCssClassAsync } from "@/fn/setCssClassAsync";
-import { usePromisesAsync } from "@/fn/usePromisesAsync";
+import { useElementRef } from "@/fn/state/useElementRef";
+import { useInTheater } from "@/fn/state/useInTheater";
 
 export const Header = (p: {
   class: ComponentProps<"div">["class"]
 }): JSX.Element => {
-  const element = () => querySelectHtmlElements("#masthead-container")[0];
-  onMount(() => {
-    setCssClassAsync(styles.TransparentOverride, [
-      querySelectHtmlElementsAsync("#masthead-container #background"),
-    ]);
-    setCssClassAsync(styles.IgnoreHeaderMargin, [
-      querySelectHtmlElementsAsync("#page-manager"),
-    ]);
-    return () => {
-      usePromisesAsync((it) => it.classList.remove(styles.TransparentOverride), [
-        querySelectHtmlElementsAsync("#masthead-container #background"),
-      ]);
-      usePromisesAsync((it) => it.classList.remove(styles.IgnoreHeaderMargin), [
-        querySelectHtmlElementsAsync("#page-manager"),
-      ]);
-    };
+  const inTheater = useInTheater();
+  useElementRef("#masthead-container #background", {
+    onMount: (it) => it?.classList.add(styles.TransparentOverride),
+    onCleanup: (it) => it?.classList.remove(styles.TransparentOverride),
+    execBy: inTheater,
+  });
+  useElementRef("#page-manager", {
+    onMount: (it) => it?.classList.add(styles.IgnoreHeaderMargin),
+    onCleanup: (it) => it?.classList.remove(styles.IgnoreHeaderMargin),
+    execBy: inTheater,
   });
 
   const [displayingPullTab, setDisplayingPullTab] = createSignal(false);
   const [allowPointerEvent, setAllowPointerEvent] = createSignal(true);
 
-  const hide = () => element().classList.add(styles.HideToTop);
-  const show = () => element().classList.remove(styles.HideToTop);
-  const [displaying, setDisplaying] = createSignal(false);
-  createEffect(() => {
-    if (!displaying()) return;
-    show();
-    setDisplayingPullTab(false);
-    const hideCallback = () => {
-      untrack(() => setDisplaying(false));
-      setAllowPointerEvent(true);
-      hide();
-    };
-    element().addEventListener("focusout", () => {
-      hideCallback();
-    }, { once: true });
-    element().addEventListener("mouseleave", () => {
-      const isFocused = element().contains(document.activeElement);
-      if (isFocused) return;
-      hideCallback();
-    }, { once: true });
-  });
-  // const tryHide = () => {
-  //   displaying()
-  //     ? undefined
-  //     : hide();
-  // };
-
   const [originalHeight, setOriginalHeight] = createSignal("2em");
-  onMount(() => {
-    hide();
-    setOriginalHeight(`${element().clientHeight}px`);
+  const [headerHided, setHeaderHided] = createSignal(false);
+  createEffect(() => inTheater() && setHeaderHided(true));
+  const hideOriginalHeader = useElementRef("#masthead-container", {
+    onMount: (it) => {
+      it?.classList.add(styles.HideToTop);
+      it && setOriginalHeight(`${it.clientHeight}px`);
+    },
+    onCleanup: (it) => {
+      it?.classList.remove(styles.HideToTop);
+      if (!inTheater()) return;
+
+      const hideCallback = () => {
+        setHeaderHided(true);
+        setAllowPointerEvent(true);
+        hideOriginalHeader.mount();
+      };
+      hideOriginalHeader.ref()?.addEventListener("focusout", () => {
+        hideCallback();
+      }, { once: true });
+      hideOriginalHeader.ref()?.addEventListener("mouseleave", () => {
+        const isFocused = hideOriginalHeader.ref()?.contains(document.activeElement);
+        if (isFocused) return;
+        hideCallback();
+      }, { once: true });
+    },
+    execBy: () =>  inTheater() && headerHided(),
   });
 
   return (
@@ -82,13 +71,13 @@ export const Header = (p: {
         <button
           class={styles.PullTab}
           onMouseEnter={() => {
-            setDisplaying(true);
+            setHeaderHided(false);
             setAllowPointerEvent(false);
           }}
         >
-          {displaying()
-            ? "hide Header ∧"
-            : "show Header ∨"
+          {headerHided()
+            ? "show Header ∨"
+            : "hide Header ∧"
           }
         </button>
       </Show>
