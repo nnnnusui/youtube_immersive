@@ -7,7 +7,6 @@ import {
   onMount,
 } from "solid-js";
 
-import { CommentList } from "./CommentList";
 import styles from "./Side.module.styl";
 
 import { querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
@@ -16,7 +15,8 @@ import { usePromisesAsync } from "@/fn/usePromisesAsync";
 export const Side = (
   p: ComponentProps<"div">
   & {
-    usePinned: (pinned: boolean) => void
+    setPinned: (pinned: boolean) => VideoDecoderConfig
+    setSideSize: (sideSize: string) => void
   }
 ): JSX.Element => {
   onMount(() => {
@@ -30,12 +30,19 @@ export const Side = (
 
   const [pinned, setPinned] = createSignal(false);
   createEffect(() => {
-    p.usePinned(pinned());
+    p.setPinned(pinned());
+  });
+  const [getRef, setRef] = createSignal<HTMLDivElement>();
+  createEffect(() => {
+    const ref = getRef();
+    if (!ref) return;
+    p.setSideSize(`${ref.clientWidth}px`);
   });
 
   return (
     <div
       class={clsx(p.class, styles.Side)}
+      ref={setRef}
     >
       <button
         class={styles.PinButton}
@@ -43,7 +50,6 @@ export const Side = (
       >
         📌
       </button>
-      <CommentList />
     </div>
   );
 };

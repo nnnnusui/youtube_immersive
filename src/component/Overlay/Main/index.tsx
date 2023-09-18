@@ -9,12 +9,13 @@ import {
 import styles from "./Main.module.styl";
 
 import { querySelectHtmlElements, querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
+import { stylx } from "@/fn/stylx";
 import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Main = (
   p: ComponentProps<"div">
   & {
-    pinned: boolean
+    pinned: boolean,
   }
 ): JSX.Element => {
   onMount(() => {
@@ -39,7 +40,8 @@ export const Main = (
   return (
     <div
       {...p}
-      class={clsx(p.class, styles.Main)}
-    />
+      class={clsx(styles.Main, p.class)}
+      style={stylx(p.style)}
+    >content</div>
   );
 };

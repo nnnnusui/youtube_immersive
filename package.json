@@ -11,6 +11,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "camelcase": "^8.0.0",
     "clsx": "^2.0.0",
     "solid-js": "^1.7.11"
   },

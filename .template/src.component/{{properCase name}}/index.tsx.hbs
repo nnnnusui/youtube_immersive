@@ -4,6 +4,8 @@ import {
   JSX,
 } from "solid-js";
 
+import { stylx } from "@/fn/stylx";
+
 import styles from "./{{properCase name}}.module.styl";
 
 export const {{properCase name}} = (
@@ -13,7 +15,8 @@ export const {{properCase name}} = (
   return (
     <div
       {...p}
-      class={clsx(p.class, styles.{{properCase name}})}
+      class={clsx(styles.{{properCase name}}, p.class)}
+      style={stylx(p.style)}
     >
       
     </div>

@@ -1,6 +1,7 @@
 import {
   JSX,
   Show,
+  createEffect,
   createSignal,
   onMount,
 } from "solid-js";
@@ -19,12 +20,18 @@ export const Overlay = (): JSX.Element => {
     usePromisesAsync(() => setInTheater(true), [
       querySelectHtmlElementsAsync("#full-bleed-container #player-container"),
     ]);
-    usePromisesAsync((it) => it.classList.add(styles.HiddenOverflow), [
+    usePromisesAsync((it) => it.classList.add(styles.YouTubeImmersive), [
       querySelectHtmlElementsAsync("body"),
     ]);
   });
 
   const [pinned, setPinned] = createSignal(false);
+  const [sideSize, setSideSize] = createSignal("25vw");
+  createEffect(() => {
+    usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--side-size", sideSize()), [
+      querySelectHtmlElementsAsync("body"),
+    ]);
+  });
 
   return (
     <div
@@ -38,7 +45,8 @@ export const Overlay = (): JSX.Element => {
         />
         <Side
           class={styles.Side}
-          usePinned={setPinned}
+          setPinned={setPinned}
+          setSideSize={setSideSize}
         />
       </Show>
     </div>
