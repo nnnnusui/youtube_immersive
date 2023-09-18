@@ -12,9 +12,9 @@ export const Header = (p: {
   class: ComponentProps<"div">["class"]
 }): JSX.Element => {
   const inTheater = useInTheater();
-  useElementRef("#masthead-container #background", {
-    onMount: (it) => it?.classList.add(styles.TransparentOverride),
-    onCleanup: (it) => it?.classList.remove(styles.TransparentOverride),
+  useElementRef("#masthead-container", {
+    onMount: (it) => it?.classList.add(styles.OverrideOriginal),
+    onCleanup: (it) => it?.classList.remove(styles.OverrideOriginal),
     execBy: inTheater,
   });
   useElementRef("#page-manager", {

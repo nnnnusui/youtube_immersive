@@ -31,8 +31,9 @@ rules:
       emptyLineBefore: never
       noEmptyLineBetween: true
       properties:
-        - visibility
         - content
+        - visibility
+        - z-index
         - pointer-events
         - cursor
         - grid-area

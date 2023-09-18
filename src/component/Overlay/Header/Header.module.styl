@@ -23,8 +23,11 @@
   border-top-width 0
 
 
-.TransparentOverride
-  background rgba(0, 0, 0, .45) !important
+.OverrideOriginal
+  z-index 10001 !important
+  :global
+    #background
+      background rgba(0, 0, 0, .45) !important
 
 .IgnoreHeaderMargin
   margin-top 0 !important
