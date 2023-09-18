@@ -27,6 +27,11 @@ export const Side = (
     onCleanup: (it) => it?.classList.remove(styles.OverrideOriginal),
     execBy: inTheater,
   });
+  useElementRef("ytd-text-inline-expander", {
+    onMount: (it) => it?.setAttribute("is-expanded", ""),
+    onCleanup: (it) => it?.removeAttribute("is-expanded"),
+    execBy: inTheater,
+  });
 
   const [getRef, setRef] = createSignal<HTMLDivElement>();
   const size = createElementSize(getRef);
