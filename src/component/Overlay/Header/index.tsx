@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import {
-  JSX, createSignal, Show, ComponentProps, createEffect,
+  JSX, createSignal, ComponentProps, createEffect,
 } from "solid-js";
 
 import styles from "./Header.module.styl";
@@ -73,22 +73,27 @@ export const Header = (p: {
       onMouseEnter={() => {
         setDisplayingPullTab(true);
         setAllowPointerEvent(false);
+        setTimeout(() => {
+          setDisplayingPullTab(false);
+          setAllowPointerEvent(true);
+        }, 2500);
       }}
     >
-      <Show when={displayingPullTab()}>
-        <button
-          class={styles.PullTab}
-          onMouseEnter={() => {
-            setHeaderHided(false);
-            setAllowPointerEvent(false);
-          }}
-        >
-          {headerHided()
-            ? "show Header ∨"
-            : "hide Header ∧"
-          }
-        </button>
-      </Show>
+      <button
+        class={clsx(
+          styles.PullTab,
+          !displayingPullTab() && styles.HideToTop
+        )}
+        onMouseEnter={() => {
+          setHeaderHided(false);
+          setAllowPointerEvent(false);
+        }}
+      >
+        {headerHided()
+          ? "show Header ∨"
+          : "hide Header ∧"
+        }
+      </button>
     </div>
   );
 };
