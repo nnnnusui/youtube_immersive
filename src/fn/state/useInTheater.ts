@@ -1,10 +1,8 @@
-import { createMutationObserver } from "@solid-primitives/mutation-observer";
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createRoot, createSignal, onCleanup, onMount } from "solid-js";
 
-/**
- * Indicates "displaying" video in theater mode.
- */
-export const useInTheater = () => {
+import { useRootObserver } from "./useRootObserver";
+
+const createInTheater = () => {
   const [inTheater, setInTheater] = createSignal(false);
   const [hasTheater, setHasTheater] = createSignal(false);
   const [inWatch, setInWatch] = createSignal(false);
@@ -13,25 +11,12 @@ export const useInTheater = () => {
   });
 
   // update `hasTheater`.
-  const [, { start, stop }] = createMutationObserver(
-    document.body,
-    {
-      childList: true,
-      subtree: true,
-    },
-    (mutations) => {
-      const addedNodes
-        = mutations.flatMap((it) => Array.from(it.addedNodes))
-          .map((it) => it as HTMLElement);
-      const finded
-        = addedNodes.find((it) => it.id === "player-container");
-      if (!finded) return;
-      const hasTheater = finded.parentElement?.id === "player-full-bleed-container";
-      setHasTheater(hasTheater);
-    }
-  );
-  onMount(start);
-  onCleanup(stop);
+  useRootObserver((addedNodes) => {
+    const finded = addedNodes.find((it) => it.id === "player-container");
+    if (!finded) return;
+    const hasTheater = finded.parentElement?.id === "player-full-bleed-container";
+    setHasTheater(hasTheater);
+  });
 
   // update `inWatch`
   const [checkInWatchTaskId, setCheckInWatchTaskId] = createSignal<number>();
@@ -46,5 +31,10 @@ export const useInTheater = () => {
   );
   onCleanup(() => clearInterval(checkInWatchTaskId()));
 
-  return [inTheater];
+  return inTheater;
 };
+
+/**
+ * Indicates "displaying" video in theater mode.
+ */
+export const useInTheater = createRoot(createInTheater);

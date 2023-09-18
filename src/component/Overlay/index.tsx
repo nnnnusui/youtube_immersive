@@ -3,22 +3,22 @@ import {
   Show,
   createEffect,
   createSignal,
-  onMount,
 } from "solid-js";
 
 import { Header } from "./Header";
 import styles from "./Overlay.module.styl";
 
 import { querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
+import { useElementRef } from "@/fn/state/useElementRef";
 import { useInTheater } from "@/fn/state/useInTheater";
 import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Overlay = (): JSX.Element => {
-  const [inTheater] = useInTheater();
-  onMount(() => {
-    usePromisesAsync((it) => it.classList.add(styles.YouTubeImmersive), [
-      querySelectHtmlElementsAsync("body"),
-    ]);
+  const inTheater = useInTheater;
+  useElementRef("body", {
+    onMount: (it) => it?.classList.add(styles.YouTubeImmersive),
+    onCleanup: (it) => it?.classList.remove(styles.YouTubeImmersive),
+    execBy: inTheater,
   });
 
   const [pinned, setPinned] = createSignal(false);
