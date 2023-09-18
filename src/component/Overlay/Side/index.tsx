@@ -32,6 +32,10 @@ export const Side = (
     onCleanup: (it) => it?.removeAttribute("is-expanded"),
     execBy: inTheater,
   });
+  useElementRef("ytd-live-chat-frame", {
+    onMount: (it) => it?.removeAttribute("collapsed"),
+    execBy: inTheater,
+  });
 
   const [getRef, setRef] = createSignal<HTMLDivElement>();
   const size = createElementSize(getRef);
@@ -39,7 +43,9 @@ export const Side = (
 
   const nav = {
     description: "#columns #primary ytd-watch-metadata",
+    chat: "#columns #secondary #chat-container",
     comments: "#columns #primary ytd-comments",
+    playlist: "#columns #secondary ytd-playlist-panel-renderer",
     related: "#columns #secondary #related",
   };
   const [visibleNav, setVisibleNav] = createSignal("description");
