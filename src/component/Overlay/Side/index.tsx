@@ -17,6 +17,7 @@ import { useInTheater } from "@/fn/state/useInTheater";
 export const Side = (
   p: ComponentProps<"div">
   & {
+    pinned: boolean
     setPinned: Setter<boolean>
     setSideSize: (sideSize: string) => void
   }
@@ -26,6 +27,11 @@ export const Side = (
     onMount: (it) => it?.classList.add(styles.OverrideOriginal),
     onCleanup: (it) => it?.classList.remove(styles.OverrideOriginal),
     execBy: inTheater,
+  });
+  useElementRef("#columns", {
+    onMount: (it) => it?.classList.add(styles.Pinned),
+    onCleanup: (it) => it?.classList.remove(styles.Pinned),
+    execBy: () => inTheater() && p.pinned,
   });
   useElementRef("ytd-text-inline-expander", {
     onMount: (it) => it?.setAttribute("is-expanded", ""),
@@ -55,20 +61,28 @@ export const Side = (
       class={clsx(p.class, styles.Side)}
       ref={setRef}
     >
-      <button
-        class={styles.PinButton}
-        onClick={() => p.setPinned((prev) => !prev)}
+      <div
+        class={styles.Controls}
       >
-        📌
-      </button>
-      <For each={Object.entries(nav)}>{([name, selector]) => (
-        <VisibilitySwitchOption
-          label={<>{name}</>}
-          selector={selector}
-          visible={name === visibleNav()}
-          onClick={() => setVisibleNav(name)}
-        />
-      )}</For>
+        <button
+          class={clsx(
+            styles.PinButton,
+            p.pinned && styles.Pinned
+          )}
+          onClick={() => p.setPinned((prev) => !prev)}
+        >
+          📌
+        </button>
+        <For each={Object.entries(nav)}>{([name, selector]) => (
+          <VisibilitySwitchOption
+            class={styles.TabButton}
+            label={<>{name}</>}
+            selector={selector}
+            visible={name === visibleNav()}
+            onClick={() => setVisibleNav(name)}
+          />
+        )}</For>
+      </div>
     </div>
   );
 };

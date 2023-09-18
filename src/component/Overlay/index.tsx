@@ -23,6 +23,13 @@ export const Overlay = (): JSX.Element => {
     execBy: inTheater,
   });
 
+  const [headerSize, setHeaderSize] = createSignal("");
+  createEffect(() => {
+    const size = headerSize();
+    usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--header-size", size), [
+      querySelectHtmlElementsAsync("body"),
+    ]);
+  });
   const [pinned, setPinned] = createSignal(true);
   const [sideSize, setSideSize] = createSignal("");
   createEffect(() => {
@@ -44,10 +51,14 @@ export const Overlay = (): JSX.Element => {
         />
         <Side
           class={styles.Side}
+          pinned={pinned()}
           setPinned={setPinned}
           setSideSize={setSideSize}
         />
-        <Header class={styles.Header} />
+        <Header
+          class={styles.Header}
+          setHeaderHeight={setHeaderSize}
+        />
       </Show>
     </div>
   );

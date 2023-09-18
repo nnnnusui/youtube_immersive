@@ -1,9 +1,44 @@
 .Side
   content ''
 
-.PinButton
+.Controls
+  content ''
+  min-height var(--youtube-immersive--header-size)
+
+  padding 0 1.2em
+
+  display flex
+  align-items center
+
+.TabButton
+  all unset
   content ''
   pointer-events auto
+
+  padding .2em .2em
+  background var(--yt-spec-text-primary)
+  color var(--yt-spec-base-background)
+  border-radius .2em
+  border solid 1px var(--yt-spec-base-background)
+  font-size 1.65em
+  font-weight 500
+
+.PinButton
+  all unset
+  content ''
+  pointer-events auto
+
+  margin-right .2em
+  padding .2em .2em
+  background rgba(0, 0, 0, .05)
+  color var(--yt-spec-base-background)
+  border-radius .2em
+  border dashed 1px var(--yt-spec-base-background)
+  font-size 1.8em
+
+  &.Pinned
+    background var(--yt-spec-text-primary)
+    border solid 1px var(--yt-spec-base-background)
 
 .OverrideOriginal
   position absolute
@@ -11,12 +46,17 @@
   right 0
   width var(--youtube-immersive--side-size)
   min-width 0 !important
-  height calc(100vh - 55px)
+  height calc(100vh - 150px)
 
   margin 0 !important
+  background rgba(0, 0, 0, .6)
+  border-bottom-left-radius 1.5em
 
   overflow-x hidden
   overflow-y auto
+
+  &.Pinned
+    height 100vh
 
   > *
     visibility hidden

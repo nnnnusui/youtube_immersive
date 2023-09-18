@@ -1,16 +1,21 @@
+import { createElementSize } from "@solid-primitives/resize-observer";
 import clsx from "clsx";
 import {
-  JSX, createSignal, ComponentProps, createEffect,
+  JSX, createSignal, ComponentProps, createEffect, Setter,
 } from "solid-js";
 
 import styles from "./Header.module.styl";
 
 import { useElementRef } from "@/fn/state/useElementRef";
 import { useInTheater } from "@/fn/state/useInTheater";
+import { stylx } from "@/fn/stylx";
 
-export const Header = (p: {
-  class: ComponentProps<"div">["class"]
-}): JSX.Element => {
+export const Header = (
+  p: ComponentProps<"div">
+  & {
+    setHeaderHeight: Setter<string>
+  }
+): JSX.Element => {
   const inTheater = useInTheater();
   useElementRef("#masthead-container", {
     onMount: (it) => it?.classList.add(styles.OverrideOriginal),
@@ -63,13 +68,19 @@ export const Header = (p: {
     execBy: () =>  inTheater() && headerHided(),
   });
 
+  const [getRef, setRef] = createSignal<HTMLElement>();
+  const size = createElementSize(getRef);
+  createEffect(() => p.setHeaderHeight(`${size.height}px`));
+
   return (
     <div
-      style={{
+      {...p}
+      style={stylx({
         "--original-height": originalHeight(),
         "pointer-events": allowPointerEvent() ? "auto" : "none",
-      }}
-      class={clsx(p.class, styles.Header)}
+      }, p.style)}
+      class={clsx(styles.Header, p.class)}
+      ref={setRef}
       onMouseEnter={() => {
         setDisplayingPullTab(true);
         setAllowPointerEvent(false);
