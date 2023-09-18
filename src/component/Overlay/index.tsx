@@ -7,39 +7,36 @@ import {
 } from "solid-js";
 
 import { Header } from "./Header";
-import { Main } from "./Main";
 import styles from "./Overlay.module.styl";
-import { Side } from "./Side";
 
 import { querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
+import { useInTheater } from "@/fn/state/useInTheater";
 import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Overlay = (): JSX.Element => {
-  const [inTheater, setInTheater] = createSignal(false);
+  const [inTheater] = useInTheater();
   onMount(() => {
-    usePromisesAsync(() => setInTheater(true), [
-      querySelectHtmlElementsAsync("#full-bleed-container #player-container"),
-    ]);
     usePromisesAsync((it) => it.classList.add(styles.YouTubeImmersive), [
       querySelectHtmlElementsAsync("body"),
     ]);
   });
 
   const [pinned, setPinned] = createSignal(false);
-  const [sideSize, setSideSize] = createSignal("25vw");
+  const [sideSize, setSideSize] = createSignal("");
   createEffect(() => {
-    usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--side-size", sideSize()), [
+    const size = sideSize();
+    usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--side-size", size), [
       querySelectHtmlElementsAsync("body"),
     ]);
   });
+  createEffect(() => console.log(inTheater() ? "inTheater" : "not in theater"));
 
   return (
     <div
       class={ styles.Overlay }
     >
       <Show when={inTheater()}>
-        <Header class={styles.Header} />
-        <Main
+        {/* <Main
           class={styles.Main}
           pinned={pinned()}
         />
@@ -47,7 +44,8 @@ export const Overlay = (): JSX.Element => {
           class={styles.Side}
           setPinned={setPinned}
           setSideSize={setSideSize}
-        />
+        /> */}
+        <Header class={styles.Header} />
       </Show>
     </div>
   );

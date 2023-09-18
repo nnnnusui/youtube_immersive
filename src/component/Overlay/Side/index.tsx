@@ -1,13 +1,15 @@
+import { createElementSize } from "@solid-primitives/resize-observer";
 import clsx from "clsx";
 import {
   ComponentProps,
   JSX,
   createEffect,
   createSignal,
-  onMount,
+  onMount, For,
 } from "solid-js";
 
 import styles from "./Side.module.styl";
+import { VisibilitySwitchOption } from "./VisibilitySwitchOption";
 
 import { querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
 import { usePromisesAsync } from "@/fn/usePromisesAsync";
@@ -23,7 +25,7 @@ export const Side = (
     usePromisesAsync((it) => it.classList.add(styles.OverrideOriginal), [
       querySelectHtmlElementsAsync("#columns"),
     ]);
-    usePromisesAsync((it) => it.classList.add(styles.Description), [
+    usePromisesAsync((it) => it.classList.add(styles.Below), [
       querySelectHtmlElementsAsync("#columns #below"),
     ]);
   });
@@ -33,11 +35,18 @@ export const Side = (
     p.setPinned(pinned());
   });
   const [getRef, setRef] = createSignal<HTMLDivElement>();
+  const size = createElementSize(getRef);
   createEffect(() => {
     const ref = getRef();
     if (!ref) return;
-    p.setSideSize(`${ref.clientWidth}px`);
+    p.setSideSize(`${size.width}px`);
   });
+
+  const nav = {
+    description: "#columns #primary",
+    related: "#columns #secondary",
+  };
+  const [visibleNav, setVisibleNav] = createSignal("description");
 
   return (
     <div
@@ -50,6 +59,14 @@ export const Side = (
       >
         📌
       </button>
+      <For each={Object.entries(nav)}>{([name, selector]) => (
+        <VisibilitySwitchOption
+          label={<>{name}</>}
+          selector={selector}
+          visible={name === visibleNav()}
+          onClick={() => setVisibleNav(name)}
+        />
+      )}</For>
     </div>
   );
 };

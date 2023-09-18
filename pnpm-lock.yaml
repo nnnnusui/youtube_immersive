@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@solid-primitives/mutation-observer':
+    specifier: ^1.1.14
+    version: 1.1.14(solid-js@1.7.11)
+  '@solid-primitives/resize-observer':
+    specifier: ^2.0.22
+    version: 2.0.22(solid-js@1.7.11)
   camelcase:
     specifier: ^8.0.0
     version: 8.0.0
@@ -885,7 +891,6 @@ packages:
     dependencies:
       '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
       solid-js: 1.7.11
-    dev: true
 
   /@solid-primitives/keyboard@1.2.5(solid-js@1.7.11):
     resolution: {integrity: sha512-1axfWM1T4ASzZp4D91vLtxARevlBuOQ6yFHr1/IkuM/7OhMLo/BrO2CcDu3vSwCPVOSiZ2P875bTiqVWQV6e5g==}
@@ -909,6 +914,15 @@ packages:
       '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
       solid-js: 1.7.11
     dev: true
+
+  /@solid-primitives/mutation-observer@1.1.14(solid-js@1.7.11):
+    resolution: {integrity: sha512-4msJjgMfVGALZnY4SnV255qJAbq/N7S4kPTdiA03wdJWnuF7GuUvwrNRlYNFF9VB6p+yKVk6Mfh7NEfnPqK42A==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
+      solid-js: 1.7.11
+    dev: false
 
   /@solid-primitives/platform@0.0.105(solid-js@1.7.11):
     resolution: {integrity: sha512-GULqmMc5vNsLSsIxIEYYxJv/6ypGKG+ig9hzSi4lxVPfooX6Go6txDlhv53woUSvaG939ceZGRq+X5uADMed6g==}
@@ -937,7 +951,6 @@ packages:
       '@solid-primitives/static-store': 0.0.5(solid-js@1.7.11)
       '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
       solid-js: 1.7.11
-    dev: true
 
   /@solid-primitives/rootless@1.4.2(solid-js@1.7.11):
     resolution: {integrity: sha512-ynI/2aEOPyc14IKCX6yDBqnsAYCoLbaP9V/jejEWMVKOT2ZdV2ZxdftaLimOpWPpvjyti5DUJIGTOfLaNb7jlg==}
@@ -946,7 +959,6 @@ packages:
     dependencies:
       '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
       solid-js: 1.7.11
-    dev: true
 
   /@solid-primitives/scheduled@1.4.1(solid-js@1.7.11):
     resolution: {integrity: sha512-OLcNXwYpX7HUOEqNPcmR31dkyI1E2imkMDBRlqsGT0ZhJV1L2g0TEREpo4nm/kUhh8LVQzkfnxS+GONx9kh90A==}
@@ -972,7 +984,6 @@ packages:
     dependencies:
       '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
       solid-js: 1.7.11
-    dev: true
 
   /@solid-primitives/styles@0.0.110(solid-js@1.7.11):
     resolution: {integrity: sha512-PSaM1Rl4+zwpOfxil8KlY87UC+R1rQy8b2EiCMjgTWakRK1TjvFM78KY5/ohFg42bp2V/DWRx2QaL/Unjm3HMg==}
@@ -990,7 +1001,6 @@ packages:
       solid-js: ^1.6.12
     dependencies:
       solid-js: 1.7.11
-    dev: true
 
   /@types/babel__core@7.20.2:
     resolution: {integrity: sha512-pNpr1T1xLUc2l3xJKuPtsEky3ybxN3m4fJkknfIpTCTfIZCDW57oAg+EfCgIIp2rvCe0Wn++/FfodDS4YXxBwA==}

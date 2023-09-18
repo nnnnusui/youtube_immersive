@@ -11,6 +11,8 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@solid-primitives/mutation-observer": "^1.1.14",
+    "@solid-primitives/resize-observer": "^2.0.22",
     "camelcase": "^8.0.0",
     "clsx": "^2.0.0",
     "solid-js": "^1.7.11"
