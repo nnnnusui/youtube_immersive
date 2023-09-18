@@ -2,6 +2,8 @@ import clsx from "clsx";
 import {
   ComponentProps,
   JSX,
+  createEffect,
+  createSignal,
   onMount,
 } from "solid-js";
 
@@ -13,6 +15,9 @@ import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Side = (
   p: ComponentProps<"div">
+  & {
+    usePinned: (pinned: boolean) => void
+  }
 ): JSX.Element => {
   onMount(() => {
     usePromisesAsync((it) => it.classList.add(styles.OverrideOriginal), [
@@ -23,10 +28,21 @@ export const Side = (
     ]);
   });
 
+  const [pinned, setPinned] = createSignal(false);
+  createEffect(() => {
+    p.usePinned(pinned());
+  });
+
   return (
     <div
       class={clsx(p.class, styles.Side)}
     >
+      <button
+        class={styles.PinButton}
+        onClick={() => setPinned((prev) => !prev)}
+      >
+        📌
+      </button>
       <CommentList />
     </div>
   );

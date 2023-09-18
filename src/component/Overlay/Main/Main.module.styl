@@ -2,9 +2,24 @@
   content ''
 
 .OverrideOriginal
+  --side-size 450px
   position fixed !important
   top 0
   left 0
-  width 100vw
+  width 100% !important
   height 100vh
   max-height 100vh !important
+
+  &.Pinned
+    width calc(100% - var(--side-size)) !important
+
+.Video
+  left unset !important
+  right unset !important
+  width 100% !important
+  height 100vh !important
+  object-fit contain !important
+
+.YtpChromeBottom
+  left unset !important
+  width 100% !important

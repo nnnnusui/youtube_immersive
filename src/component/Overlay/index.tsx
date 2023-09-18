@@ -24,14 +24,22 @@ export const Overlay = (): JSX.Element => {
     ]);
   });
 
+  const [pinned, setPinned] = createSignal(false);
+
   return (
     <div
       class={ styles.Overlay }
     >
       <Show when={inTheater()}>
         <Header class={styles.Header} />
-        <Main class={styles.Main} />
-        <Side class={styles.Side} />
+        <Main
+          class={styles.Main}
+          pinned={pinned()}
+        />
+        <Side
+          class={styles.Side}
+          usePinned={setPinned}
+        />
       </Show>
     </div>
   );
