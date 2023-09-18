@@ -8,22 +8,14 @@ import {
 import styles from "./Main.module.styl";
 
 import { querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
-import { setCssClassAsync, usePromisesAsync } from "@/fn/setCssClassAsync";
+import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Main = (
   p: ComponentProps<"div">
 ): JSX.Element => {
   onMount(() => {
-    console.log(styles.OverrideOriginal);
-    setCssClassAsync(styles.OverrideOriginal, [
-      querySelectHtmlElementsAsync("#primary #player"),
-    ]);
-    querySelectHtmlElementsAsync("#primary #player")
-      .then(console.log);
-    usePromisesAsync(unsetWidthAndLeft, [
-      querySelectHtmlElementsAsync("#primary #player video"),
-      querySelectHtmlElementsAsync("#primary #player .ytp-chrome-bottom"),
-      querySelectHtmlElementsAsync("#primary #player .ytp-chapter-hover-container"),
+    usePromisesAsync((it) => it.classList.add(styles.OverrideOriginal), [
+      querySelectHtmlElementsAsync("#full-bleed-container"),
     ]);
   });
 
@@ -33,9 +25,4 @@ export const Main = (
       class={clsx(p.class, styles.Main)}
     />
   );
-};
-
-const unsetWidthAndLeft = (element: HTMLElement) => {
-  element.style.width = "";
-  element.style.left = "";
 };

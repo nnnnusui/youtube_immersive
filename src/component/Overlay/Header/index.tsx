@@ -5,12 +5,30 @@ import {
 
 import styles from "./Header.module.styl";
 
-import { querySelectHtmlElements } from "@/fn/querySelectHtmlElements";
+import { querySelectHtmlElements, querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
+import { setCssClassAsync } from "@/fn/setCssClassAsync";
+import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Header = (p: {
   class: ComponentProps<"div">["class"]
 }): JSX.Element => {
   const element = () => querySelectHtmlElements("#masthead-container")[0];
+  onMount(() => {
+    setCssClassAsync(styles.TransparentOverride, [
+      querySelectHtmlElementsAsync("#masthead-container #background"),
+    ]);
+    setCssClassAsync(styles.IgnoreHeaderMargin, [
+      querySelectHtmlElementsAsync("#page-manager"),
+    ]);
+    return () => {
+      usePromisesAsync((it) => it.classList.remove(styles.TransparentOverride), [
+        querySelectHtmlElementsAsync("#masthead-container #background"),
+      ]);
+      usePromisesAsync((it) => it.classList.remove(styles.IgnoreHeaderMargin), [
+        querySelectHtmlElementsAsync("#page-manager"),
+      ]);
+    };
+  });
 
   const [displayingPullTab, setDisplayingPullTab] = createSignal(false);
   const [allowPointerEvent, setAllowPointerEvent] = createSignal(true);

@@ -1,2 +1,19 @@
 .Side
   content ''
+
+.OverrideOriginal
+  position absolute
+  top 0
+  right 0
+  width 450px
+  min-width unset !important
+  height calc(100vh - 55px)
+  overflow scroll
+  :global
+    #primary
+      min-width unset !important
+
+.Description
+  position absolute !important
+  right 0
+  width 450px
