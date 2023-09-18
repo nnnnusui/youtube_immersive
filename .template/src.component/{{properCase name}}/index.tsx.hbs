@@ -1,0 +1,21 @@
+import clsx from "clsx";
+import {
+  ComponentProps,
+  JSX,
+} from "solid-js";
+
+import styles from "./{{properCase name}}.module.styl";
+
+export const {{properCase name}} = (
+  p: ComponentProps<"div">
+): JSX.Element => {
+
+  return (
+    <div
+      {...p}
+      class={clsx(p.class, styles.{{properCase name}})}
+    >
+      
+    </div>
+  );
+};

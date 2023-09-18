@@ -1,0 +1,19 @@
+{
+	"name": "yt_immersive",
+	"service": "workspace",
+	"workspaceFolder": "/work",
+	"dockerComposeFile": "docker-compose.yml",
+	"onCreateCommand": "pnpm install",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"SamKirkland.plop-templates",
+				"dbaeumer.vscode-eslint",
+				"sysoev.language-stylus",
+				"stylelint.vscode-stylelint",
+				"eamodio.gitlens"
+			]
+		}
+	},
+	"remoteUser": "node"
+}

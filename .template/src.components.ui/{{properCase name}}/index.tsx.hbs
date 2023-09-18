@@ -1,0 +1,34 @@
+import clsx from "clsx";
+import {
+  ComponentPropsWithRef,
+  ReactNode,
+} from "react";
+
+import styles from "./{{properCase name}}.module.scss";
+
+/**
+ * 
+ *
+ * `<{{wrapTargetElement}} />`ラッパー。
+ */
+export const {{properCase name}} = ({
+  children,
+  ...wrappedProps
+}:
+  /** `<{{wrapTargetElement}} />`要素に渡す */
+  ComponentPropsWithRef<"{{wrapTargetElement}}">
+  & {
+    /** 子要素 */
+    children?: ReactNode
+  },
+): ReactNode => {
+
+  return (
+    <{{wrapTargetElement}}
+      {...wrappedProps}
+      className={ clsx(styles.{{properCase name}}, wrappedProps.className) }
+    >
+      {children}
+    </{{wrapTargetElement}}>
+  );
+};

@@ -1,0 +1,25 @@
+{
+  // formamtter ->
+  "eslint.format.enable": true,
+  "stylelint.validate": ["stylus"],
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports": true,
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true,
+  },
+  "eslint.trace.server": "verbose",
+  "editor.tabSize": 2,
+  // <- formamtter
+
+  "task.allowAutomaticTasks": "on",
+  "files.exclude": {
+    ".pnpm-store": true,
+    "node_modules": true,
+    "**/.DS_Store": true,
+  },
+  "files.readonlyInclude": {
+    "node_modules/**/*": true,
+  },
+  "workbench.editor.labelFormat": "short",
+  "typescript.tsdk": "node_modules/typescript/lib",
+}

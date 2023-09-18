@@ -1,0 +1,28 @@
+import {
+  ReactNode,
+} from "react";
+import { Outlet } from "react-router-dom";
+
+import { PageInfo } from "@/type/PageInfo";
+
+import styles from "./Layout.module.scss";
+
+/**
+ * [URL: ここにURLを記入] 配下で表示されるページに適用されるレイアウト
+ *
+ * `<Outlet />` 部分に各ページが挿入される。
+ */
+const Layout = (): ReactNode => {
+
+  return (
+    <div className={styles.Layout}>
+      <Outlet />
+    </div>
+  );
+};
+
+export default Layout;
+
+export const Page: PageInfo = {
+  Component: Layout,
+};

@@ -1,0 +1,72 @@
+root: true
+env:
+  es2020: true
+  browser: true
+  node: true
+plugins:
+  - "@typescript-eslint"
+  - import
+  - unused-imports
+  - solid
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:solid/recommended
+rules:
+# >> import
+  import/order:
+    - warn
+    -
+      groups:
+        - builtin
+        - external
+        - internal
+        -
+          - parent
+          - sibling
+        - object
+        - type
+        - index
+      newlines-between: always
+      pathGroupsExcludedImportTypes:
+        - builtin
+      alphabetize:
+        order: asc
+        caseInsensitive: true
+      pathGroups:
+        -
+          pattern: "@/components"
+          group: internal
+          position: before
+  unused-imports/no-unused-imports-ts: warn
+# <<
+  "@typescript-eslint/no-empty-function": off
+  "@typescript-eslint/no-namespace": off
+  eol-last:
+    - warn
+    - always
+  quotes:
+    - warn
+    - double
+  semi:
+    - warn
+    - always
+  indent:
+    - warn
+    - 2
+  comma-dangle:
+    - warn
+    - always-multiline
+  arrow-parens:
+    - warn
+    - always
+  arrow-spacing: warn
+  operator-linebreak:
+    - warn
+    - before
+  object-curly-spacing:
+    - warn
+    - always
+  object-property-newline: 
+    - warn
+  no-trailing-spaces: warn
