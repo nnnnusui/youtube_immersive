@@ -2,16 +2,13 @@ import clsx from "clsx";
 import {
   ComponentProps,
   JSX,
-  createEffect,
-  createSignal,
-  onMount,
 } from "solid-js";
 
 import styles from "./VisibilitySwitchOption.module.styl";
 
-import { querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
+import { useElementRef } from "@/fn/state/useElementRef";
+import { useInTheater } from "@/fn/state/useInTheater";
 import { stylx } from "@/fn/stylx";
-import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 
 export const VisibilitySwitchOption = (
@@ -22,21 +19,16 @@ export const VisibilitySwitchOption = (
     visible: boolean
   }
 ): JSX.Element => {
-  const [getElement, setElement] = createSignal<HTMLElement>();
-  onMount(() => {
-    usePromisesAsync((it) => {
-      it.classList.add(styles.OptionContent);
-      setElement(it);
-    }, [
-      querySelectHtmlElementsAsync(p.selector),
-    ]);
+  const inTheater = useInTheater();
+  useElementRef(() => p.selector, {
+    onMount: (it) => it?.classList.add(styles.OptionalContent),
+    onCleanup: (it) => it?.classList.remove(styles.OptionalContent),
+    execBy: inTheater,
   });
-  createEffect(() => {
-    const element = getElement();
-    if (!element) return;
-    p.visible
-      ? element.classList.remove(styles.Hidden)
-      : element.classList.add(styles.Hidden);
+  useElementRef(() => p.selector, {
+    onMount: (it) => it?.classList.add(styles.Hidden),
+    onCleanup: (it) => it?.classList.remove(styles.Hidden),
+    execBy: () => inTheater() && !p.visible,
   });
 
   return (

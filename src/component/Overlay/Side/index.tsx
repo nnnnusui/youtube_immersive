@@ -5,10 +5,11 @@ import {
   JSX,
   Setter,
   createEffect,
-  createSignal,
+  createSignal, For,
 } from "solid-js";
 
 import styles from "./Side.module.styl";
+import { VisibilitySwitchOption } from "./VisibilitySwitchOption";
 
 import { useElementRef } from "@/fn/state/useElementRef";
 import { useInTheater } from "@/fn/state/useInTheater";
@@ -26,19 +27,15 @@ export const Side = (
     onCleanup: (it) => it?.classList.remove(styles.OverrideOriginal),
     execBy: inTheater,
   });
-  useElementRef("#columns #below", {
-    onMount: (it) => it?.classList.add(styles.Below),
-    onCleanup: (it) => it?.classList.remove(styles.Below),
-    execBy: inTheater,
-  });
 
   const [getRef, setRef] = createSignal<HTMLDivElement>();
   const size = createElementSize(getRef);
   createEffect(() => p.setSideSize(`${size.width}px`));
 
   const nav = {
-    description: "#columns #primary",
-    related: "#columns #secondary",
+    description: "#columns #primary ytd-watch-metadata",
+    comments: "#columns #primary ytd-comments",
+    related: "#columns #secondary #related",
   };
   const [visibleNav, setVisibleNav] = createSignal("description");
 
@@ -53,14 +50,14 @@ export const Side = (
       >
         📌
       </button>
-      {/* <For each={Object.entries(nav)}>{([name, selector]) => (
+      <For each={Object.entries(nav)}>{([name, selector]) => (
         <VisibilitySwitchOption
           label={<>{name}</>}
           selector={selector}
           visible={name === visibleNav()}
           onClick={() => setVisibleNav(name)}
         />
-      )}</For> */}
+      )}</For>
     </div>
   );
 };

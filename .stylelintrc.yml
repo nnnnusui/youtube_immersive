@@ -31,6 +31,7 @@ rules:
       emptyLineBefore: never
       noEmptyLineBetween: true
       properties:
+        - visibility
         - content
         - pointer-events
         - cursor
@@ -87,5 +88,8 @@ rules:
       emptyLineBefore: always
       noEmptyLineBetween: true
       properties:
+        - overflow
+        - overflow-x
+        - overflow-y
         - display
         - text-align

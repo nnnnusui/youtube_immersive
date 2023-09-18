@@ -7,18 +7,23 @@ import { querySelectHtmlElementsAsync } from "../querySelectHtmlElements";
  * And [Mount, Dismount(Cleanup)] additional functions.
  */
 export const useElementRef = (
-  selector: string,
+  selector: (() => string) | string,
   options?: {
     onMount?: (ref: HTMLElement | undefined) => void,
     onCleanup?: (ref: HTMLElement | undefined) => void,
     execBy?: () => boolean,
   }
 ) => {
+  const getSelector
+    = typeof selector === "function"
+      ? selector
+      : () => selector;
+
   const [getRef, setRef] = createSignal<HTMLElement>();
   createEffect(() => {
     const refs = getRef();
     if (refs) return;
-    querySelectHtmlElementsAsync(selector)
+    querySelectHtmlElementsAsync(getSelector())
       .then((it) => setRef(it[0]));
   });
 

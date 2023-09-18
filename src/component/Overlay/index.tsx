@@ -23,7 +23,7 @@ export const Overlay = (): JSX.Element => {
     execBy: inTheater,
   });
 
-  const [pinned, setPinned] = createSignal(false);
+  const [pinned, setPinned] = createSignal(true);
   const [sideSize, setSideSize] = createSignal("");
   createEffect(() => {
     const size = sideSize();

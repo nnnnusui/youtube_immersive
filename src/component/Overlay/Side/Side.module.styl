@@ -10,12 +10,24 @@
   top 0
   right 0
   width var(--youtube-immersive--side-size)
-  min-width unset !important
+  min-width 0 !important
   height calc(100vh - 55px)
-  overflow scroll
+
+  overflow-x hidden
+
+  > *
+    visibility hidden
+
   :global
     #primary
-      min-width unset !important
+      flex unset !important
+      min-width 0 !important
+
+      margin 0 !important
+      padding 0 !important
+    #below
+      position absolute !important
+      width var(--youtube-immersive--side-size) !important
 
 .Below
   position absolute !important
