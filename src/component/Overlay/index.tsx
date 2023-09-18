@@ -6,7 +6,9 @@ import {
 } from "solid-js";
 
 import { Header } from "./Header";
+import { Main } from "./Main";
 import styles from "./Overlay.module.styl";
+import { Side } from "./Side";
 
 import { querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
 import { useElementRef } from "@/fn/state/useElementRef";
@@ -36,7 +38,7 @@ export const Overlay = (): JSX.Element => {
       class={ styles.Overlay }
     >
       <Show when={inTheater()}>
-        {/* <Main
+        <Main
           class={styles.Main}
           pinned={pinned()}
         />
@@ -44,7 +46,7 @@ export const Overlay = (): JSX.Element => {
           class={styles.Side}
           setPinned={setPinned}
           setSideSize={setSideSize}
-        /> */}
+        />
         <Header class={styles.Header} />
       </Show>
     </div>

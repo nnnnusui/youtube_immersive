@@ -2,15 +2,13 @@ import clsx from "clsx";
 import {
   ComponentProps,
   JSX,
-  createEffect,
-  onMount,
 } from "solid-js";
 
 import styles from "./Main.module.styl";
 
-import { querySelectHtmlElements, querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
+import { useElementRef } from "@/fn/state/useElementRef";
+import { useInTheater } from "@/fn/state/useInTheater";
 import { stylx } from "@/fn/stylx";
-import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Main = (
   p: ComponentProps<"div">
@@ -18,23 +16,27 @@ export const Main = (
     pinned: boolean,
   }
 ): JSX.Element => {
-  onMount(() => {
-    usePromisesAsync((it) => it.classList.add(styles.OverrideOriginal), [
-      querySelectHtmlElementsAsync("#full-bleed-container"),
-    ]);
-    usePromisesAsync((it) => it.classList.add(styles.Video), [
-      querySelectHtmlElementsAsync("#full-bleed-container video"),
-    ]);
-    usePromisesAsync((it) => it.classList.add(styles.YtpChromeBottom), [
-      querySelectHtmlElementsAsync("#full-bleed-container .ytp-chrome-bottom"),
-    ]);
+  const inTheater = useInTheater();
+  useElementRef("#full-bleed-container", {
+    onMount: (it) => it?.classList.add(styles.OverrideOriginal),
+    onCleanup: (it) => it?.classList.remove(styles.OverrideOriginal),
+    execBy: inTheater,
   });
-  createEffect(() => {
-    const element = querySelectHtmlElements("#full-bleed-container")[0];
-    if (!element) return;
-    p.pinned
-      ? element.classList.add(styles.Pinned)
-      : element.classList.remove(styles.Pinned);
+  useElementRef("#full-bleed-container video", {
+    onMount: (it) => it?.classList.add(styles.Video),
+    onCleanup: (it) => it?.classList.remove(styles.Video),
+    execBy: inTheater,
+  });
+  useElementRef("#full-bleed-container .ytp-chrome-bottom", {
+    onMount: (it) => it?.classList.add(styles.YtpChromeBottom),
+    onCleanup: (it) => it?.classList.remove(styles.YtpChromeBottom),
+    execBy: inTheater,
+  });
+
+  useElementRef("#full-bleed-container", {
+    onMount: (it) => it?.classList.add(styles.Pinned),
+    onCleanup: (it) => it?.classList.remove(styles.Pinned),
+    execBy: () => inTheater() && p.pinned,
   });
 
   return (
