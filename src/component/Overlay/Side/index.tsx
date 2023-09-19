@@ -138,7 +138,7 @@ export const Side = (
           style={{
             "pointer-events": allowPointerEvent() ? "auto" : "none",
           }}
-          onMouseEnter={() => {
+          onMouseMove={() => {
             setDisplayingPullTab(true);
             setAllowPointerEvent(false);
             setTimeout(() => {
@@ -156,7 +156,10 @@ export const Side = (
               setOriginalHided(false);
               setAllowPointerEvent(false);
             }}
-            onClick={() => setOriginalHided(true)}
+            onClick={() => {
+              setOriginalHided(true);
+              setAllowPointerEvent(true);
+            }}
           >
             {originalHided()
               ? "<"
