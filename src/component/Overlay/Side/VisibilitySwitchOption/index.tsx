@@ -34,7 +34,11 @@ export const VisibilitySwitchOption = (
   return (
     <button
       {...p}
-      class={clsx(styles.VisibilitySwitchOption, p.class)}
+      class={clsx(
+        styles.VisibilitySwitchOption,
+        p.class,
+        p.visible && styles.Visible
+      )}
       style={stylx(p.style)}
     >{p.label}</button>
   );

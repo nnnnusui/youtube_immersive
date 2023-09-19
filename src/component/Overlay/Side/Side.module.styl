@@ -1,27 +1,54 @@
 .Side
   content ''
+  position absolute
+  top 0
+  right 0
+  bottom var(--youtube-immersive--side-bottom)
+  width 750px
+
+.Resizer
+  position absolute
+  left 0
+  width 0
+  height 100%
+  border-left solid 4px transparent
+  &:hover
+    border-left-color white
+
+.PullTabContainer
+  content ''
+  position absolute
+  right 0
+  width 200px
+  height 100%
+
+  display flex
+  flex-direction column
+  justify-content center
+  align-items flex-end
+
+.PullTab
+  content ''
+  pointer-events auto
+  height 5em
+
+  border-radius .5em
+  border-top-right-radius 0
+  border-bottom-right-radius 0
+
+.HideToRight
+  transform translateX(100%)
+  transition-duration .125s
 
 .Controls
   content ''
+  pointer-events auto
   min-height var(--youtube-immersive--header-size)
 
   padding 0 1.2em
 
   display flex
   align-items center
-
-.TabButton
-  all unset
-  content ''
-  pointer-events auto
-
-  padding .2em .2em
-  background var(--yt-spec-text-primary)
-  color var(--yt-spec-base-background)
-  border-radius .2em
-  border solid 1px var(--yt-spec-base-background)
-  font-size 1.65em
-  font-weight 500
 
 .PinButton
   all unset
@@ -44,12 +71,11 @@
   position absolute
   top 0
   right 0
+  bottom var(--youtube-immersive--side-bottom)
   width var(--youtube-immersive--side-size)
   min-width 0 !important
-  height calc(100vh - 150px)
 
   margin 0 !important
-  background rgba(0, 0, 0, .6)
   border-bottom-left-radius 1.5em
 
   overflow-x hidden
@@ -60,12 +86,6 @@
 
   > *
     visibility hidden
-
-  &::-webkit-scrollbar
-    width 4px
-    height 4px
-  &::-webkit-scrollbar-thumb
-    background white
 
   :global
     #primary

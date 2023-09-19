@@ -30,7 +30,15 @@ export const Overlay = (): JSX.Element => {
       querySelectHtmlElementsAsync("body"),
     ]);
   });
-  const [pinned, setPinned] = createSignal(true);
+  const [pinned, setPinned] = createSignal(false);
+  const [_sideBottomSize] = createSignal("150px");
+  const sideBottomSize = () => pinned() ? "0px" : _sideBottomSize();
+  createEffect(() => {
+    const size = sideBottomSize();
+    usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--side-bottom", size), [
+      querySelectHtmlElementsAsync("body"),
+    ]);
+  });
   const [sideSize, setSideSize] = createSignal("");
   createEffect(() => {
     const size = sideSize();
@@ -45,6 +53,10 @@ export const Overlay = (): JSX.Element => {
       class={ styles.Overlay }
     >
       <Show when={inTheater()}>
+        <Header
+          class={styles.Header}
+          setHeaderHeight={setHeaderSize}
+        />
         <Main
           class={styles.Main}
           pinned={pinned()}
@@ -54,10 +66,6 @@ export const Overlay = (): JSX.Element => {
           pinned={pinned()}
           setPinned={setPinned}
           setSideSize={setSideSize}
-        />
-        <Header
-          class={styles.Header}
-          setHeaderHeight={setHeaderSize}
         />
       </Show>
     </div>

@@ -5,7 +5,7 @@ import {
   JSX,
   Setter,
   createEffect,
-  createSignal, For,
+  createSignal, For, Show,
 } from "solid-js";
 
 import styles from "./Side.module.styl";
@@ -42,10 +42,67 @@ export const Side = (
     onMount: (it) => it?.removeAttribute("collapsed"),
     execBy: inTheater,
   });
+  useElementRef("ytd-watch-metadata", {
+    onMount: (it) => it?.removeAttribute("description-collapsed"),
+    execBy: inTheater,
+  });
+  useElementRef("ytd-watch-metadata tp-yt-paper-button#expand", {
+    onMount: (it) => it?.setAttribute("hidden", ""),
+    execBy: inTheater,
+  });
+  useElementRef("ytd-watch-metadata tp-yt-paper-button#collapse", {
+    onMount: (it) => it?.setAttribute("hidden", ""),
+    onCleanup: (it) => it?.removeAttribute("hidden"),
+    execBy: inTheater,
+  });
 
   const [getRef, setRef] = createSignal<HTMLDivElement>();
   const size = createElementSize(getRef);
   createEffect(() => p.setSideSize(`${size.width}px`));
+
+  const [displayingPullTab, setDisplayingPullTab] = createSignal(false);
+  const [allowPointerEvent, setAllowPointerEvent] = createSignal(true);
+  const [originalHided, setOriginalHided] = createSignal(false);
+  createEffect(() => inTheater() && setOriginalHided(true));
+  const hideOriginalHeader = useElementRef("#columns", {
+    onMount: (it) => it?.classList.add(styles.HideToRight),
+    onCleanup: (it) => {
+      it?.classList.remove(styles.HideToRight);
+      if (!inTheater() || p.pinned) return;
+      setDisplayingPullTab(false);
+      const refs = () => [it, getRef()];
+      const callback = () => {
+        setOriginalHided(true);
+        setAllowPointerEvent(true);
+        hideOriginalHeader.mount();
+      };
+      let innerClicked = false;
+      const documentClick = (event: MouseEvent) => {
+        const contained = refs().find((it) => it?.contains(event.target as HTMLElement));
+        if (contained) {
+          innerClicked = true;
+          return;
+        }
+        callback();
+        document.removeEventListener("click", documentClick);
+      };
+      document.addEventListener("click", documentClick);
+      const onPointerLeave = (event: PointerEvent) => {
+        const movedDest = document.elementFromPoint(event.x, event.y);
+        const contained = refs().find((it) => it?.contains(movedDest as HTMLElement));
+        console.log(movedDest);
+        console.log(contained);
+        if (innerClicked) return;
+        if (contained) {
+          contained?.addEventListener("pointerleave", onPointerLeave, { once: true });
+          return;
+        }
+        callback();
+      };
+      it?.addEventListener("pointerleave", onPointerLeave, { once: true });
+    },
+    execBy: () =>  inTheater() && !p.pinned && originalHided(),
+  });
 
   const nav = {
     description: "#columns #primary ytd-watch-metadata",
@@ -58,16 +115,58 @@ export const Side = (
 
   return (
     <div
-      class={clsx(p.class, styles.Side)}
+      class={clsx(
+        p.class,
+        styles.Side,
+      )}
       ref={setRef}
     >
       <div
-        class={styles.Controls}
+        class={clsx(styles.Resizer)}
+      />
+      <Show when={!p.pinned}>
+        <div
+          class={styles.PullTabContainer}
+          style={{
+            "pointer-events": allowPointerEvent() ? "auto" : "none",
+          }}
+          onMouseEnter={() => {
+            setDisplayingPullTab(true);
+            setAllowPointerEvent(false);
+            setTimeout(() => {
+              setDisplayingPullTab(false);
+              setAllowPointerEvent(true);
+            }, 2500);
+          }}
+        >
+          <button
+            class={clsx(
+              styles.PullTab,
+              !displayingPullTab() && styles.HideToRight
+            )}
+            onMouseEnter={() => {
+              setOriginalHided(false);
+              setAllowPointerEvent(false);
+            }}
+            onClick={() => setOriginalHided(true)}
+          >
+            {originalHided()
+              ? "<"
+              : ">"
+            }
+          </button>
+        </div>
+      </Show>
+      <div
+        class={clsx(
+          styles.Controls,
+          !p.pinned && originalHided() && styles.HideToRight,
+        )}
       >
         <button
           class={clsx(
             styles.PinButton,
-            p.pinned && styles.Pinned
+            p.pinned && styles.Pinned,
           )}
           onClick={() => p.setPinned((prev) => !prev)}
         >

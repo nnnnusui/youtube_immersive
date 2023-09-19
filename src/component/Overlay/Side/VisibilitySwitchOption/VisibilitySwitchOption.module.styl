@@ -1,17 +1,46 @@
 .VisibilitySwitchOption
+  all unset
   content ''
   pointer-events auto
 
+  padding .2em .2em
+  background var(--yt-spec-text-primary)
+  color var(--yt-spec-base-background)
+  border-radius .2em
+  border solid 1px var(--yt-spec-base-background)
+  font-size 1.65em
+  font-weight 500
+
+  &.Visible
+    font-weight 300
+
+    background rgba(255, 255, 255, .2)
+    color var(--yt-spec-text-primary)
+    border-color var(--yt-spec-text-primary)
+    border-bottom-width 0
+
+
 .OptionalContent
   visibility visible
-  position absolute
-  top 50px
-  left -40px !important
-  width calc(var(--youtube-immersive--side-size) - 20px) !important
+  position fixed
+  top 0 !important
+  right 0 !important
+  bottom var(--youtube-immersive--side-bottom) !important
+  width var(--youtube-immersive--side-size) !important
 
   margin 0 !important
-  padding 0 !important
+  padding 0 2em !important
+  padding-top var(--youtube-immersive--header-size) !important
   box-sizing border-box
+  background rgba(0, 0, 0, .6)
+
+  overflow auto
+
+  &::-webkit-scrollbar
+    width 4px
+    height 4px
+  &::-webkit-scrollbar-thumb
+    background white
 
 .Hidden
   visibility hidden

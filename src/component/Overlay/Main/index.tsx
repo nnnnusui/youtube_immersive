@@ -44,6 +44,6 @@ export const Main = (
       {...p}
       class={clsx(styles.Main, p.class)}
       style={stylx(p.style)}
-    >content</div>
+    />
   );
 };
