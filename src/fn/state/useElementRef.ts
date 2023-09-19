@@ -7,12 +7,8 @@ import { querySelectHtmlElementsAsync } from "../querySelectHtmlElements";
  * And [Mount, Dismount(Cleanup)] additional functions.
  */
 export const useElementRef = (
-  selector: (() => string) | string,
-  options?: {
-    onMount?: (ref: HTMLElement | undefined) => void,
-    onCleanup?: (ref: HTMLElement | undefined) => void,
-    execBy?: () => boolean,
-  }
+  selector: UseElementRefArgs["selector"],
+  options?: UseElementRefArgs["options"]
 ) => {
   const getSelector
     = typeof selector === "function"
@@ -46,3 +42,12 @@ export const useElementRef = (
     cleanup,
   };
 };
+
+export type UseElementRefArgs = {
+  selector: (() => string) | string,
+  options?: {
+    onMount?: (ref: HTMLElement | undefined) => void,
+    onCleanup?: (ref: HTMLElement | undefined) => void,
+    execBy?: () => boolean,
+  }
+}

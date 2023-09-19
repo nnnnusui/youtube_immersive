@@ -1,7 +1,6 @@
 import {
   JSX,
   Show,
-  createEffect,
   createSignal,
 } from "solid-js";
 
@@ -10,10 +9,9 @@ import { Main } from "./Main";
 import styles from "./Overlay.module.styl";
 import { Side } from "./Side";
 
-import { querySelectHtmlElementsAsync } from "@/fn/querySelectHtmlElements";
+import { createCssVariableSignal } from "@/fn/state/createCssVariableSignal";
 import { useElementRef } from "@/fn/state/useElementRef";
 import { useInTheater } from "@/fn/state/useInTheater";
-import { usePromisesAsync } from "@/fn/usePromisesAsync";
 
 export const Overlay = (): JSX.Element => {
   const inTheater = useInTheater();
@@ -23,30 +21,10 @@ export const Overlay = (): JSX.Element => {
     execBy: inTheater,
   });
 
-  const [headerSize, setHeaderSize] = createSignal("");
-  createEffect(() => {
-    const size = headerSize();
-    usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--header-size", size), [
-      querySelectHtmlElementsAsync("body"),
-    ]);
-  });
   const [pinned, setPinned] = createSignal(false);
-  const [_sideBottomSize] = createSignal("150px");
-  const sideBottomSize = () => pinned() ? "0px" : _sideBottomSize();
-  createEffect(() => {
-    const size = sideBottomSize();
-    usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--side-bottom", size), [
-      querySelectHtmlElementsAsync("body"),
-    ]);
-  });
-  const [sideSize, setSideSize] = createSignal("750px");
-  createEffect(() => {
-    const size = sideSize();
-    usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--side-size", size), [
-      querySelectHtmlElementsAsync("body"),
-    ]);
-  });
-  createEffect(() => console.log(inTheater() ? "inTheater" : "not in theater"));
+  const [, setHeaderSize] = createCssVariableSignal("", "header-size");
+  const [, setSideSize] = createCssVariableSignal("750px", "side-size");
+  createCssVariableSignal("150px", "side-bottom", { execBy: () => !pinned() });
 
   return (
     <div
