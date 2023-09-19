@@ -70,3 +70,4 @@ rules:
   object-property-newline: 
     - warn
   no-trailing-spaces: warn
+  "solid/reactivity": off

@@ -87,8 +87,6 @@ export const Side = (
       const onPointerLeave = (event: PointerEvent) => {
         const movedDest = document.elementFromPoint(event.x, event.y);
         const contained = refs().find((it) => it?.contains(movedDest as HTMLElement));
-        console.log(movedDest);
-        console.log(contained);
         if (innerClicked) return;
         if (contained) {
           contained?.addEventListener("pointerleave", onPointerLeave, { once: true });

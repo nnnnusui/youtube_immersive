@@ -10,6 +10,7 @@ import styles from "./Overlay.module.styl";
 import { Side } from "./Side";
 
 import { createCssVariableSignal } from "@/fn/state/createCssVariableSignal";
+import { makeStoraged } from "@/fn/state/makeStoraged";
 import { useElementRef } from "@/fn/state/useElementRef";
 import { useInTheater } from "@/fn/state/useInTheater";
 
@@ -21,7 +22,7 @@ export const Overlay = (): JSX.Element => {
     execBy: inTheater,
   });
 
-  const [pinned, setPinned] = createSignal(false);
+  const [pinned, setPinned] = makeStoraged("pinned")(createSignal(false));
   const [, setHeaderSize] = createCssVariableSignal("", "header-size");
   const [, setSideSize] = createCssVariableSignal("750px", "side-size");
   createCssVariableSignal("150px", "side-bottom", { execBy: () => !pinned() });
