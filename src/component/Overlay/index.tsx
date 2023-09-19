@@ -39,7 +39,7 @@ export const Overlay = (): JSX.Element => {
       querySelectHtmlElementsAsync("body"),
     ]);
   });
-  const [sideSize, setSideSize] = createSignal("");
+  const [sideSize, setSideSize] = createSignal("750px");
   createEffect(() => {
     const size = sideSize();
     usePromisesAsync((it) => it.style.setProperty("--youtube-immersive--side-size", size), [

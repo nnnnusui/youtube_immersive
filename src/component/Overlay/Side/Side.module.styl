@@ -4,9 +4,11 @@
   top 0
   right 0
   bottom var(--youtube-immersive--side-bottom)
-  width 750px
+  width var(--youtube-immersive--side-size)
 
 .Resizer
+  pointer-events auto
+  cursor col-resize
   position absolute
   left 0
   width 0
@@ -76,7 +78,6 @@
   min-width 0 !important
 
   margin 0 !important
-  border-bottom-left-radius 1.5em
 
   overflow-x hidden
   overflow-y auto

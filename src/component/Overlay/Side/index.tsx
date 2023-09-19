@@ -1,4 +1,3 @@
-import { createElementSize } from "@solid-primitives/resize-observer";
 import clsx from "clsx";
 import {
   ComponentProps,
@@ -57,8 +56,6 @@ export const Side = (
   });
 
   const [getRef, setRef] = createSignal<HTMLDivElement>();
-  const size = createElementSize(getRef);
-  createEffect(() => p.setSideSize(`${size.width}px`));
 
   const [displayingPullTab, setDisplayingPullTab] = createSignal(false);
   const [allowPointerEvent, setAllowPointerEvent] = createSignal(true);
@@ -123,6 +120,17 @@ export const Side = (
     >
       <div
         class={clsx(styles.Resizer)}
+        onPointerDown={(event) => {
+          const ref = event.currentTarget;
+          ref.setPointerCapture(event.pointerId);
+          const onMove = (event: PointerEvent) => {
+            const width = window.innerWidth - event.screenX;
+            p.setSideSize(`${width}px`);
+          };
+          const onLeave = () => ref.removeEventListener("pointermove", onMove, false);
+          ref.addEventListener("pointermove", onMove, false);
+          ref.addEventListener("pointerup", onLeave, { once: false });
+        }}
       />
       <Show when={!p.pinned}>
         <div
