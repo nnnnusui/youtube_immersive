@@ -6,7 +6,7 @@ export const makeStoraged = (
   onMount(() => {
     chrome.storage.local.get(key)
       .then((it) => {
-        set(it[key]);
+        set((prev) => it[key] ?? prev);
       });
   });
   createEffect((on(
