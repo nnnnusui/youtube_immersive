@@ -24,7 +24,7 @@ export const Overlay = (): JSX.Element => {
 
   const [pinned, setPinned] = makeStoraged("pinned")(createSignal(false));
   const [, setHeaderSize] = makeCssVariable("header-size")(createSignal(""));
-  const [, setSideSize] = makeCssVariable("side-size")(createSignal("750px"));
+  const [, setSideSize] = makeStoraged("sideSize")(makeCssVariable("side-size")(createSignal("750px")));
   makeCssVariable("side-bottom", { execBy: () => !pinned() })(createSignal("150px"));
 
   return (
