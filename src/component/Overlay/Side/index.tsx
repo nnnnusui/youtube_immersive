@@ -122,8 +122,13 @@ export const Side = (
           const ref = event.currentTarget;
           ref.setPointerCapture(event.pointerId);
           const onMove = (event: PointerEvent) => {
-            const width = window.innerWidth - event.screenX;
+            const width = window.innerWidth - event.clientX;
             p.setSideWidth(`${width}px`);
+            console.log(JSON.stringify({
+              innerWidth: window.innerWidth,
+              clientX: event.clientX,
+              width,
+            }));
           };
           const onLeave = () => ref.removeEventListener("pointermove", onMove, false);
           ref.addEventListener("pointermove", onMove, false);
