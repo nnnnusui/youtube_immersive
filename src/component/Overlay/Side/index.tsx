@@ -18,7 +18,7 @@ export const Side = (
   & {
     pinned: boolean
     setPinned: Setter<boolean>
-    setSideSize: (sideSize: string) => void
+    setSideWidth: (sideWidth: string) => void
   }
 ): JSX.Element => {
   const inTheater = useInTheater();
@@ -123,7 +123,7 @@ export const Side = (
           ref.setPointerCapture(event.pointerId);
           const onMove = (event: PointerEvent) => {
             const width = window.innerWidth - event.screenX;
-            p.setSideSize(`${width}px`);
+            p.setSideWidth(`${width}px`);
           };
           const onLeave = () => ref.removeEventListener("pointermove", onMove, false);
           ref.addEventListener("pointermove", onMove, false);

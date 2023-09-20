@@ -24,7 +24,7 @@ export const Overlay = (): JSX.Element => {
 
   const [pinned, setPinned] = makeStoraged("pinned")(createSignal(false));
   const [, setHeaderSize] = makeCssVariable("header-size")(createSignal(""));
-  const [, setSideSize] = makeStoraged("sideSize")(makeCssVariable("side-size")(createSignal("750px")));
+  const [, setSideWidth] = makeStoraged("sideWidth")(makeCssVariable("side-width")(createSignal("750px")));
   makeCssVariable("side-bottom", { execBy: () => !pinned() })(createSignal("150px"));
 
   return (
@@ -44,7 +44,7 @@ export const Overlay = (): JSX.Element => {
           class={styles.Side}
           pinned={pinned()}
           setPinned={setPinned}
-          setSideSize={setSideSize}
+          setSideWidth={setSideWidth}
         />
       </Show>
     </div>
