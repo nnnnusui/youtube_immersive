@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite build --watch",
+    "storybook": "storybook dev --no-open -p 6006",
     "build": "vite build",
     "serve": "vite preview"
   },
@@ -19,17 +20,28 @@
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "2.0.0-beta.18",
+    "@storybook/addon-essentials": "^7.4.2",
+    "@storybook/addon-interactions": "^7.4.2",
+    "@storybook/addon-links": "^7.4.2",
+    "@storybook/blocks": "^7.4.2",
+    "@storybook/testing-library": "^0.2.1",
     "@types/chrome": "^0.0.246",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
     "eslint": "^8.49.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-solid": "^0.13.0",
+    "eslint-plugin-storybook": "^0.6.13",
     "eslint-plugin-unused-imports": "^3.0.0",
     "happy-css-modules": "^2.1.2",
     "postcss-d-ts": "^1.2.0",
     "postcss-styl": "^0.12.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "solid-devtools": "^0.27.7",
+    "storybook": "^7.4.2",
+    "storybook-solidjs": "^1.0.0-beta.2",
+    "storybook-solidjs-vite": "^1.0.0-beta.2",
     "stylelint": "^15.10.3",
     "stylelint-config-recess-order": "^4.3.0",
     "stylelint-declaration-block-no-ignored-properties": "^2.7.0",
@@ -41,5 +53,10 @@
     "vite-plugin-solid": "^2.7.0",
     "vite-tsconfig-paths": "^4.2.1"
   },
-  "private": "true"
+  "private": "true",
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
+  }
 }
