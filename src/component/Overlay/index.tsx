@@ -27,14 +27,27 @@ export const Overlay = (): JSX.Element => {
   const [, setSideWidth] = makeStoraged("sideWidth")(makeCssVariable("side-width")(createSignal("750px")));
   makeCssVariable("side-bottom", { execBy: () => !pinned() })(createSignal("150px"));
 
+  const [suppressClickCallback, setSuppressClickCallback] = createSignal<VoidCallback>();
+
   return (
     <div
       class={ styles.Overlay }
     >
+      <div
+        class={styles.ClickSuppresser}
+        style={{
+          "pointer-events": suppressClickCallback() ? "auto" : "none",
+        }}
+        onClick={() => {
+          suppressClickCallback()?.();
+          setSuppressClickCallback();
+        }}
+      />
       <Show when={inTheater()}>
         <Header
           class={styles.Header}
           setHeaderHeight={setHeaderSize}
+          setSuppressClickCallback={setSuppressClickCallback}
         />
         <Main
           class={styles.Main}
@@ -45,6 +58,7 @@ export const Overlay = (): JSX.Element => {
           pinned={pinned()}
           setPinned={setPinned}
           setSideWidth={setSideWidth}
+          setSuppressClickCallback={setSuppressClickCallback}
         />
       </Show>
     </div>

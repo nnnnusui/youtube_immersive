@@ -19,6 +19,7 @@ export const Side = (
     pinned: boolean
     setPinned: Setter<boolean>
     setSideWidth: (sideWidth: string) => void
+    setSuppressClickCallback: Setter<VoidCallback | undefined>
   }
 ): JSX.Element => {
   const inTheater = useInTheater();
@@ -61,7 +62,7 @@ export const Side = (
   const [allowPointerEvent, setAllowPointerEvent] = createSignal(true);
   const [originalHided, setOriginalHided] = createSignal(false);
   createEffect(() => inTheater() && setOriginalHided(true));
-  const hideOriginalHeader = useElementRef("#columns", {
+  const hideOriginal = useElementRef("#columns", {
     onMount: (it) => it?.classList.add(styles.HideToRight),
     onCleanup: (it) => {
       it?.classList.remove(styles.HideToRight);
@@ -71,13 +72,14 @@ export const Side = (
       const callback = () => {
         setOriginalHided(true);
         setAllowPointerEvent(true);
-        hideOriginalHeader.mount();
+        hideOriginal.mount();
       };
       let innerClicked = false;
       const documentClick = (event: MouseEvent) => {
         const contained = refs().find((it) => it?.contains(event.target as HTMLElement));
         if (contained) {
           innerClicked = true;
+          p.setSuppressClickCallback(() => callback);
           return;
         }
         callback();

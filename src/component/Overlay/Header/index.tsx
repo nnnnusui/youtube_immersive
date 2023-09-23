@@ -14,6 +14,7 @@ export const Header = (
   p: ComponentProps<"div">
   & {
     setHeaderHeight: Setter<string>
+    setSuppressClickCallback: Setter<VoidCallback | undefined>
   }
 ): JSX.Element => {
   const inTheater = useInTheater();
@@ -50,16 +51,10 @@ export const Header = (
         hideOriginalHeader.mount();
       };
       let innerClicked = false;
-      const documentClick = (event: MouseEvent) => {
-        const isContains = hideOriginalHeader.ref()?.contains(event.target as HTMLElement);
-        if (isContains) {
-          innerClicked = true;
-          return;
-        }
-        hideCallback();
-        document.removeEventListener("click", documentClick);
-      };
-      document.addEventListener("click", documentClick);
+      hideOriginalHeader.ref()?.addEventListener("click", () => {
+        innerClicked = true;
+        p.setSuppressClickCallback(() => hideCallback);
+      });
       hideOriginalHeader.ref()?.addEventListener("mouseleave", () => {
         if (innerClicked) return;
         hideCallback();
