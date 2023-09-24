@@ -106,7 +106,10 @@ export const Side = (
       ref={setRef}
     >
       <div
-        class={clsx(styles.Resizer)}
+        class={clsx(
+          styles.Resizer,
+          p.pinned || !pullTab.target.isShown && styles.Hide,
+        )}
         onPointerDown={(event) => {
           const ref = event.currentTarget;
           ref.setPointerCapture(event.pointerId);
