@@ -91,7 +91,7 @@ export const Side = (
   const nav = {
     description: "#columns #primary ytd-watch-metadata",
     chat: "#columns #secondary #chat-container",
-    comments: "#columns #primary ytd-comments",
+    comments: "#columns #primary ytd-comments#comments",
     playlist: "#columns #secondary ytd-playlist-panel-renderer",
     related: "#columns #secondary #related",
   };
