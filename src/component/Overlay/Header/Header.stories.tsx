@@ -1,11 +1,15 @@
+import { createSignal } from "solid-js";
 import { StoryObj, Meta } from "storybook-solidjs";
 
 import { Header } from ".";
 
+const [, setSuppressClickCallback] = createSignal<{ callback: () => void }>();
 const meta: Meta<typeof Header> = {
   component: Header,
   args: {
+    inTheater: true,
     setHeaderHeight: () => {},
+    setSuppressClickCallback: setSuppressClickCallback,
   },
   decorators: [
     (Story) => (

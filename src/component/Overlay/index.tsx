@@ -38,6 +38,7 @@ export const Overlay = (): JSX.Element => {
       <Show when={inTheater()}>
         <Header
           class={styles.Header}
+          inTheater={inTheater()}
           setHeaderHeight={setHeaderSize}
           setSuppressClickCallback={setSuppressClickCallback}
         />

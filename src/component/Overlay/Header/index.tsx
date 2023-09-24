@@ -8,36 +8,35 @@ import styles from "./Header.module.styl";
 
 import { createPullTab } from "@/fn/state/createPullTab";
 import { useElementRef } from "@/fn/state/useElementRef";
-import { useInTheater } from "@/fn/state/useInTheater";
 import { stylx } from "@/fn/stylx";
 
 export const Header = (
   p: ComponentProps<"div">
   & {
+    inTheater: boolean
     setHeaderHeight: Setter<string>
     setSuppressClickCallback: Setter<{ callback: () => void } | undefined>
   }
 ): JSX.Element => {
-  const inTheater = useInTheater();
   useElementRef("#masthead-container", {
     onMount: (it) => it?.classList.add(styles.OverrideOriginal),
     onCleanup: (it) => it?.classList.remove(styles.OverrideOriginal),
-    execBy: inTheater,
+    execBy: () => p.inTheater,
   });
   useElementRef("#page-manager", {
     onMount: (it) => it?.classList.add(styles.IgnoreHeaderMargin),
     onCleanup: (it) => it?.classList.remove(styles.IgnoreHeaderMargin),
-    execBy: inTheater,
+    execBy: () => p.inTheater,
   });
 
   const [originalHeight, setOriginalHeight] = createSignal("2em");
   const originalHeader = useElementRef("#masthead-container", {
     onMount: (it) => {
-      // it?.classList.add(styles.HideToTop);
+      it?.classList.add(styles.HideToTop);
       it && setOriginalHeight(`${it.clientHeight}px`);
     },
     onCleanup: (it) => it?.classList.remove(styles.HideToTop),
-    execBy: () =>  inTheater(),
+    execBy: () => p.inTheater,
   });
 
   const [getRef, setRef] = createSignal<HTMLElement>();
