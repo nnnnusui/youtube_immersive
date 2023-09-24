@@ -10,6 +10,9 @@ const meta: Meta<typeof Header> = {
     inTheater: true,
     setHeaderHeight: () => {},
     setSuppressClickCallback: setSuppressClickCallback,
+    style: {
+      background: "rgba(0, 0, 100, .1)",
+    },
   },
   decorators: [
     (Story) => (
