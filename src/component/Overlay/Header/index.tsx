@@ -55,15 +55,13 @@ export const Header = (
     ref.addEventListener("pointerleave", pullTab.target.props.onPointerLeave);
   });
   createEffect(() => {
-    console.log(pullTab.target.focused ? "focused" : "unfocused");
-    if (!pullTab.target.focused) return p.setSuppressClickCallback();
-
-    p.setSuppressClickCallback({
-      callback: () => {
-        pullTab.unFocus();
-        console.log("run suppress click");
-      },
-    });
+    p.setSuppressClickCallback(
+      pullTab.target.focused
+        ? {
+          callback: pullTab.unFocus,
+        }
+        : undefined
+    );
   });
 
   return (
@@ -85,8 +83,8 @@ export const Header = (
         )}
       >
         {pullTab.isShown
-          ? "hide Header ∧"
-          : "show Header ∨"
+          ? "show Header ∨"
+          : "hide Header ∧"
         }
       </button>
     </div>
