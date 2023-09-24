@@ -19,7 +19,7 @@ export const Side = (
     pinned: boolean
     setPinned: Setter<boolean>
     setSideWidth: (sideWidth: string) => void
-    setSuppressClickCallback: Setter<VoidCallback | undefined>
+    setSuppressClickCallback: Setter<{ callback: () => void } | undefined>
   }
 ): JSX.Element => {
   const inTheater = useInTheater();
@@ -78,8 +78,9 @@ export const Side = (
       const documentClick = (event: MouseEvent) => {
         const contained = refs().find((it) => it?.contains(event.target as HTMLElement));
         if (contained) {
+          console.log("contained");
           innerClicked = true;
-          p.setSuppressClickCallback(() => callback);
+          p.setSuppressClickCallback({ callback });
           return;
         }
         callback();

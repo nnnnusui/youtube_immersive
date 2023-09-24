@@ -6,6 +6,7 @@ import {
 
 import styles from "./Header.module.styl";
 
+import { createPullTab } from "@/fn/state/createPullTab";
 import { useElementRef } from "@/fn/state/useElementRef";
 import { useInTheater } from "@/fn/state/useInTheater";
 import { stylx } from "@/fn/stylx";
@@ -14,7 +15,7 @@ export const Header = (
   p: ComponentProps<"div">
   & {
     setHeaderHeight: Setter<string>
-    setSuppressClickCallback: Setter<VoidCallback | undefined>
+    setSuppressClickCallback: Setter<{ callback: () => void } | undefined>
   }
 ): JSX.Element => {
   const inTheater = useInTheater();
@@ -29,75 +30,63 @@ export const Header = (
     execBy: inTheater,
   });
 
-  const [displayingPullTab, setDisplayingPullTab] = createSignal(false);
-  const [allowPointerEvent, setAllowPointerEvent] = createSignal(true);
-
   const [originalHeight, setOriginalHeight] = createSignal("2em");
-  const [headerHided, setHeaderHided] = createSignal(false);
-  createEffect(() => inTheater() && setHeaderHided(true));
-  const hideOriginalHeader = useElementRef("#masthead-container", {
+  const originalHeader = useElementRef("#masthead-container", {
     onMount: (it) => {
-      it?.classList.add(styles.HideToTop);
+      // it?.classList.add(styles.HideToTop);
       it && setOriginalHeight(`${it.clientHeight}px`);
     },
-    onCleanup: (it) => {
-      it?.classList.remove(styles.HideToTop);
-      if (!inTheater()) return;
-
-      setDisplayingPullTab(false);
-      const hideCallback = () => {
-        setHeaderHided(true);
-        setAllowPointerEvent(true);
-        hideOriginalHeader.mount();
-      };
-      let innerClicked = false;
-      hideOriginalHeader.ref()?.addEventListener("click", () => {
-        innerClicked = true;
-        p.setSuppressClickCallback(() => hideCallback);
-      });
-      hideOriginalHeader.ref()?.addEventListener("mouseleave", () => {
-        if (innerClicked) return;
-        hideCallback();
-      }, { once: true });
-    },
-    execBy: () =>  inTheater() && headerHided(),
+    onCleanup: (it) => it?.classList.remove(styles.HideToTop),
+    execBy: () =>  inTheater(),
   });
 
   const [getRef, setRef] = createSignal<HTMLElement>();
   const size = createElementSize(getRef);
   createEffect(() => p.setHeaderHeight(`${size.height}px`));
 
+  const pullTab = createPullTab([getRef, originalHeader.ref]);
+  createEffect(() => {
+    const ref = originalHeader.ref();
+    if (!ref) return;
+    pullTab.target.isShown
+      ? ref.classList.remove(styles.HideToTop)
+      : ref.classList.add(styles.HideToTop);
+    ref.addEventListener("click", pullTab.target.props.onClick);
+    ref.addEventListener("pointerleave", pullTab.target.props.onPointerLeave);
+  });
+  createEffect(() => {
+    console.log(pullTab.target.focused ? "focused" : "unfocused");
+    if (!pullTab.target.focused) return p.setSuppressClickCallback();
+
+    p.setSuppressClickCallback({
+      callback: () => {
+        pullTab.unFocus();
+        console.log("run suppress click");
+      },
+    });
+  });
+
   return (
     <div
       {...p}
       style={stylx({
         "--original-height": originalHeight(),
-        "pointer-events": allowPointerEvent() ? "auto" : "none",
+        "pointer-events": pullTab.detector.standby ? "auto" : "none",
       }, p.style)}
       class={clsx(styles.Header, p.class)}
       ref={setRef}
-      onMouseEnter={() => {
-        setDisplayingPullTab(true);
-        setAllowPointerEvent(false);
-        setTimeout(() => {
-          setDisplayingPullTab(false);
-          setAllowPointerEvent(true);
-        }, 2500);
-      }}
+      onPointerEnter={pullTab.detector.props.onPointerEnter}
     >
       <button
+        {...pullTab.props}
         class={clsx(
           styles.PullTab,
-          !displayingPullTab() && styles.HideToTop
+          !pullTab.isShown && styles.HideToTop
         )}
-        onMouseEnter={() => {
-          setHeaderHided(false);
-          setAllowPointerEvent(false);
-        }}
       >
-        {headerHided()
-          ? "show Header ∨"
-          : "hide Header ∧"
+        {pullTab.isShown
+          ? "hide Header ∧"
+          : "show Header ∨"
         }
       </button>
     </div>

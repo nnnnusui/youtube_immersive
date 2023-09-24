@@ -1,6 +1,7 @@
 import {
   JSX,
   Show,
+  createEffect,
   createSignal,
 } from "solid-js";
 
@@ -27,22 +28,13 @@ export const Overlay = (): JSX.Element => {
   const [, setSideWidth] = makeStoraged("sideWidth")(makeCssVariable("side-width")(createSignal("750px")));
   makeCssVariable("side-bottom", { execBy: () => !pinned() })(createSignal("150px"));
 
-  const [suppressClickCallback, setSuppressClickCallback] = createSignal<VoidCallback>();
+  const [suppressClickCallback, setSuppressClickCallback] = createSignal<{ callback: () => void }>();
+  createEffect(() => console.log("detect suppresser callback updated." + suppressClickCallback));
 
   return (
     <div
       class={ styles.Overlay }
     >
-      <div
-        class={styles.ClickSuppresser}
-        style={{
-          "pointer-events": suppressClickCallback() ? "auto" : "none",
-        }}
-        onClick={() => {
-          suppressClickCallback()?.();
-          setSuppressClickCallback();
-        }}
-      />
       <Show when={inTheater()}>
         <Header
           class={styles.Header}
@@ -52,6 +44,8 @@ export const Overlay = (): JSX.Element => {
         <Main
           class={styles.Main}
           pinned={pinned()}
+          suppressClickCallback={suppressClickCallback()}
+          setSuppressClickCallback={setSuppressClickCallback}
         />
         <Side
           class={styles.Side}
