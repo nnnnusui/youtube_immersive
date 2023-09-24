@@ -52,7 +52,6 @@ export const Header = (
       ? ref.classList.remove(styles.HideToTop)
       : ref.classList.add(styles.HideToTop);
     ref.addEventListener("click", pullTab.target.props.onClick);
-    ref.addEventListener("pointerleave", pullTab.target.props.onPointerLeave);
   });
   createEffect(() => {
     p.setSuppressClickCallback(

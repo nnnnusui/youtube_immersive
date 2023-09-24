@@ -10,6 +10,7 @@ import {
 import styles from "./Side.module.styl";
 import { VisibilitySwitchOption } from "./VisibilitySwitchOption";
 
+import { createPullTab } from "@/fn/state/createPullTab";
 import { useElementRef } from "@/fn/state/useElementRef";
 import { useInTheater } from "@/fn/state/useInTheater";
 
@@ -58,48 +59,33 @@ export const Side = (
 
   const [getRef, setRef] = createSignal<HTMLDivElement>();
 
-  const [displayingPullTab, setDisplayingPullTab] = createSignal(false);
-  const [allowPointerEvent, setAllowPointerEvent] = createSignal(true);
-  const [originalHided, setOriginalHided] = createSignal(false);
-  createEffect(() => inTheater() && setOriginalHided(true));
   const hideOriginal = useElementRef("#columns", {
-    onMount: (it) => it?.classList.add(styles.HideToRight),
-    onCleanup: (it) => {
-      it?.classList.remove(styles.HideToRight);
-      if (!inTheater() || p.pinned) return;
-      setDisplayingPullTab(false);
-      const refs = () => [it, getRef()];
-      const callback = () => {
-        setOriginalHided(true);
-        setAllowPointerEvent(true);
-        hideOriginal.mount();
-      };
-      let innerClicked = false;
-      const documentClick = (event: MouseEvent) => {
-        const contained = refs().find((it) => it?.contains(event.target as HTMLElement));
-        if (contained) {
-          console.log("contained");
-          innerClicked = true;
-          p.setSuppressClickCallback({ callback });
-          return;
-        }
-        callback();
-        document.removeEventListener("click", documentClick);
-      };
-      document.addEventListener("click", documentClick);
-      const onPointerLeave = (event: PointerEvent) => {
-        const movedDest = document.elementFromPoint(event.x, event.y);
-        const contained = refs().find((it) => it?.contains(movedDest as HTMLElement));
-        if (innerClicked) return;
-        if (contained) {
-          contained?.addEventListener("pointerleave", onPointerLeave, { once: true });
-          return;
-        }
-        callback();
-      };
-      it?.addEventListener("pointerleave", onPointerLeave, { once: true });
+    onMount: (it) => {
+      it?.classList.add(styles.HideToRight);
+      console.log("mounted");
+      console.log(inTheater() && !p.pinned);
     },
-    execBy: () =>  inTheater() && !p.pinned && originalHided(),
+    onCleanup: (it) => it?.classList.remove(styles.HideToRight),
+    execBy: () =>  inTheater() && !p.pinned,
+  });
+
+  const pullTab = createPullTab([getRef, hideOriginal.ref]);
+  createEffect(() => {
+    const ref = hideOriginal.ref();
+    if (!ref) return;
+    pullTab.target.isShown
+      ? ref.classList.remove(styles.HideToRight)
+      : ref.classList.add(styles.HideToRight);
+    ref.addEventListener("click", pullTab.target.props.onClick);
+  });
+  createEffect(() => {
+    p.setSuppressClickCallback(
+      pullTab.target.focused
+        ? {
+          callback: pullTab.unFocus,
+        }
+        : undefined
+    );
   });
 
   const nav = {
@@ -140,36 +126,22 @@ export const Side = (
       />
       <Show when={!p.pinned}>
         <div
+          {...pullTab.detector.props}
           class={styles.PullTabContainer}
           style={{
-            "pointer-events": allowPointerEvent() ? "auto" : "none",
-          }}
-          onMouseMove={() => {
-            setDisplayingPullTab(true);
-            setAllowPointerEvent(false);
-            setTimeout(() => {
-              setDisplayingPullTab(false);
-              setAllowPointerEvent(true);
-            }, 2500);
+            "pointer-events": pullTab.detector.standby ? "auto" : "none",
           }}
         >
           <button
+            {...pullTab.props}
             class={clsx(
               styles.PullTab,
-              !displayingPullTab() && styles.HideToRight
+              !pullTab.isShown && styles.HideToRight
             )}
-            onMouseEnter={() => {
-              setOriginalHided(false);
-              setAllowPointerEvent(false);
-            }}
-            onClick={() => {
-              setOriginalHided(true);
-              setAllowPointerEvent(true);
-            }}
           >
-            {originalHided()
-              ? "<"
-              : ">"
+            {pullTab.isShown
+              ? ">"
+              : "<"
             }
           </button>
         </div>
@@ -177,7 +149,7 @@ export const Side = (
       <div
         class={clsx(
           styles.Controls,
-          !p.pinned && originalHided() && styles.HideToRight,
+          p.pinned || !pullTab.target.isShown && styles.HideToRight,
         )}
       >
         <button

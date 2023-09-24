@@ -20,7 +20,6 @@ type PullTab = {
     focused: boolean
     props: {
       onClick: () => void
-      onPointerLeave: () => void
     }
   }
 }
@@ -42,12 +41,18 @@ export const createPullTab = (targetRefs: (() => (HTMLElement | undefined))[]): 
   const pull = () => {
     setShowPullTab(false);
     setShowPullTarget(true);
-  };
-  const leave = () => {
-    if (targetFocused()) return;
-    setStandby(true);
-    setShowPullTab(false);
-    setShowPullTarget(false);
+    // set leave event
+    const onPointerMove = (event: PointerEvent) => {
+      if (targetFocused()) return;
+      const onInnerTarget
+        = targetRefs.find((ref) => ref()?.contains(event.target as HTMLElement));
+      if (onInnerTarget) return;
+      document.removeEventListener("pointermove", onPointerMove);
+      setStandby(true);
+      setShowPullTab(false);
+      setShowPullTarget(false);
+    };
+    document.addEventListener("pointermove", onPointerMove);
   };
   const unFocus = () => {
     setTargetFocused(false);
@@ -57,6 +62,7 @@ export const createPullTab = (targetRefs: (() => (HTMLElement | undefined))[]): 
   };
   const focus = () => {
     setTargetFocused(true);
+    // set unfocus event
     const onClickGlobal = (event: MouseEvent) => {
       const onInnerTarget
         = targetRefs.find((ref) => ref()?.contains(event.target as HTMLElement));
@@ -85,7 +91,6 @@ export const createPullTab = (targetRefs: (() => (HTMLElement | undefined))[]): 
       get focused() { return targetFocused(); },
       props: {
         onClick: focus,
-        onPointerLeave: leave,
       },
     },
   };

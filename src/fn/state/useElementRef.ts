@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 
 import { querySelectHtmlElementsAsync } from "../querySelectHtmlElements";
 
@@ -16,6 +16,7 @@ export const useElementRef = (
       : () => selector;
 
   const [getRef, setRef] = createSignal<HTMLElement>();
+  const [destributeRef, setDestributeRef] = createSignal<HTMLElement>();
   createEffect(() => {
     const refs = getRef();
     if (refs) return;
@@ -25,19 +26,22 @@ export const useElementRef = (
 
   const mount = () => options?.onMount?.(getRef());
   const cleanup = () => options?.onCleanup?.(getRef());
-  onMount(mount);
   onCleanup(cleanup);
 
   createEffect(() => {
     const execBy = options?.execBy?.();
     if (execBy === undefined) return;
-    execBy
-      ? mount()
-      : cleanup();
+    if (execBy) {
+      mount();
+      setDestributeRef(getRef());
+    } else {
+      cleanup();
+      setDestributeRef();
+    }
   });
 
   return {
-    ref: getRef,
+    ref: destributeRef,
     mount,
     cleanup,
   };
