@@ -1,7 +1,6 @@
 import {
   JSX,
   Show,
-  createEffect,
   createSignal,
 } from "solid-js";
 
@@ -29,7 +28,6 @@ export const Overlay = (): JSX.Element => {
   makeCssVariable("side-bottom", { execBy: () => !pinned() })(createSignal("150px"));
 
   const [suppressClickCallback, setSuppressClickCallback] = createSignal<{ callback: () => void }>();
-  createEffect(() => console.log("detect suppresser callback updated." + suppressClickCallback));
 
   return (
     <div

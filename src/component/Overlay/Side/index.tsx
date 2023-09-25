@@ -62,8 +62,6 @@ export const Side = (
   const hideOriginal = useElementRef("#columns", {
     onMount: (it) => {
       it?.classList.add(styles.HideToRight);
-      console.log("mounted");
-      console.log(inTheater() && !p.pinned);
     },
     onCleanup: (it) => it?.classList.remove(styles.HideToRight),
     execBy: () =>  inTheater() && !p.pinned,
@@ -116,11 +114,6 @@ export const Side = (
           const onMove = (event: PointerEvent) => {
             const width = window.innerWidth - event.clientX;
             p.setSideWidth(`${width}px`);
-            console.log(JSON.stringify({
-              innerWidth: window.innerWidth,
-              clientX: event.clientX,
-              width,
-            }));
           };
           const onLeave = () => ref.removeEventListener("pointermove", onMove, false);
           ref.addEventListener("pointermove", onMove, false);
