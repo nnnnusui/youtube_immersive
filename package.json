@@ -6,8 +6,9 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "type": "module",
   "scripts": {
-    "dev": "vite build --watch",
-    "storybook": "storybook dev --no-open -p 6006",
+    "dev": "pnpm /^dev:.*/",
+    "dev:watch": "vite build --watch",
+    "dev:storybook": "storybook dev -p 6006",
     "build": "vite build",
     "serve": "vite preview"
   },

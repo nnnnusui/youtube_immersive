@@ -22,4 +22,6 @@
   },
   "workbench.editor.labelFormat": "short",
   "typescript.tsdk": "node_modules/typescript/lib",
+  "storybook-opener.openInEditor.enable": true,
+  "storybook-opener.openInEditor.follow": true,
 }

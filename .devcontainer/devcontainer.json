@@ -3,7 +3,7 @@
 	"service": "workspace",
 	"workspaceFolder": "/work",
 	"dockerComposeFile": "docker-compose.yml",
-	"onCreateCommand": "pnpm install",
+	"onCreateCommand": "pnpm install --shamefully-hoist",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -11,6 +11,7 @@
 				"dbaeumer.vscode-eslint",
 				"sysoev.language-stylus",
 				"stylelint.vscode-stylelint",
+				"ygkn.storybook-opener",
 				"eamodio.gitlens"
 			]
 		}
