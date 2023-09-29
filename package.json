@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "pnpm /^dev:.*/",
     "dev:watch": "vite build --watch",
-    "dev:storybook": "storybook dev -p 6006",
+    "dev:storybook": "storybook dev -p 6006 --no-open",
     "build": "vite build",
     "serve": "vite preview"
   },
