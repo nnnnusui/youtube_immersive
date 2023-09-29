@@ -1,10 +1,13 @@
 import { ManifestV3Export } from "@crxjs/vite-plugin";
 
+import packageJson from "../package.json";
+
 export const manifest: Extract<ManifestV3Export, { version: string }> = {
   manifest_version: 3,
-  name: "YouTube-Immersive",
-  version: "0.0.2",
-  description: "YouTube UI changed to a more immersive form.",
+  name: "YouTube Immersive",
+  short_name: "yt_im",
+  version: packageJson.version,
+  description: packageJson.description,
   // icons: {
   // },
   permissions: [
