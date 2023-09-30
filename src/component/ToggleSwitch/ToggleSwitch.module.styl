@@ -1,0 +1,42 @@
+.ToggleSwitch
+  --inset 4px
+  --thumb-size 16px
+  --border-radius 1.5em
+  --transition .15s
+  content ''
+  position relative
+
+  display flex
+  flex-direction column
+  align-items center
+
+.Input
+  display none
+
+.Slider
+  cursor pointer
+  width calc((var(--thumb-size) + var(--inset)) * 2)
+  // position absolute
+  // inset 0
+
+  // padding 2px
+  background-color #ccc
+  border-radius var(--border-radius)
+  transition var(--transition)
+
+  input:checked ~ &
+    background-color #2196f3
+
+.Thumb
+  content ''
+  height var(--thumb-size)
+  aspect-ratio 1 / 1
+
+  margin var(--inset)
+  background-color white
+  color black
+  border-radius var(--border-radius)
+  transition var(--transition)
+
+  input:checked ~ .Slider &
+    transform translateX(var(--thumb-size))
