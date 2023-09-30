@@ -8,6 +8,9 @@ export const makeStoraged = (
       .then((it) => {
         set((prev) => it[key] ?? prev);
       });
+    chrome.storage.local.onChanged.addListener((changes) => {
+      set((prev) => changes?.[key]?.newValue ?? prev);
+    });
   });
   createEffect((on(
     get,
