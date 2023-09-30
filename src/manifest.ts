@@ -8,8 +8,11 @@ export const manifest: Extract<ManifestV3Export, { version: string }> = {
   short_name: "yt_im",
   version: packageJson.version,
   description: packageJson.description,
-  // icons: {
-  // },
+  icons: {
+    "16": "16.png",
+    "48": "48.png",
+    "128": "128.png",
+  },
   permissions: [
     "storage",
   ],
