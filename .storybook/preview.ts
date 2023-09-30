@@ -1,4 +1,5 @@
 import { Preview } from "storybook-solidjs";
+import "../src/index.styl"
 
 const preview: Preview = {
   parameters: {
