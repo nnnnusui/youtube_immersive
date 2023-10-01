@@ -52,5 +52,6 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
+          body: ${{ steps.changelog.outputs.changes }}
           files: |
             ${{ steps.names.outputs.asset_name }}
