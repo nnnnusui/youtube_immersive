@@ -1,7 +1,7 @@
 {
   "name": "youtube_immersive",
   "author": "nnnnusui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Change YouTube's UI to a more immersive form.",
   "license": "SEE LICENSE IN LICENSE.md",
   "type": "module",
