@@ -19,7 +19,7 @@ const createInTheater = () => {
   });
 
   // update `inWatch`
-  const [checkInWatchTaskId, setCheckInWatchTaskId] = createSignal<number>();
+  const [checkInWatchTaskId, setCheckInWatchTaskId] = createSignal<NodeJS.Timer>();
   onMount(() =>
     setCheckInWatchTaskId(
       setInterval(() => {
