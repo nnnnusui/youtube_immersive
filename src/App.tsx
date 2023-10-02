@@ -10,6 +10,18 @@ const App: Component = () => {
   onMount(async () => {
     setStorage(await chrome.storage.local.get() as Persisted);
   });
+  onMount(() => {
+    chrome.storage.local.onChanged.addListener((changes) => {
+      const newValue = Object.fromEntries(
+        Object.entries(changes)
+          .map(([key, value]) => [key, value.newValue])
+      ) as Persisted;
+      setStorage((prev) => ({
+        ...prev,
+        ...newValue,
+      }));
+    });
+  });
 
   return (
     <section class={styles.App}>
