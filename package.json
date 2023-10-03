@@ -11,8 +11,8 @@
     "dev:storybook": "storybook dev -p 6006 --no-open",
     "lint": "pnpm /^lint:.*/",
     "lint:ts": "tsc --skipLibCheck",
-    "lint:eslint": "eslint src",
-    "lint:stylelint": "stylelint \"**/*.styl\"",
+    "lint:eslint": "eslint src --max-warnings=0",
+    "lint:stylelint": "stylelint \"**/*.styl\" --max-warnings=0",
     "build": "vite build",
     "serve": "vite preview"
   },
