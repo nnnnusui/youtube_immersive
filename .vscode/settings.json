@@ -24,4 +24,8 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "storybook-opener.openInEditor.enable": true,
   "storybook-opener.openInEditor.follow": true,
+  "emojisense.languages": {
+    "*": true,
+  },
+  "emojisense.unicodeCompletionsEnabled": false,
 }
