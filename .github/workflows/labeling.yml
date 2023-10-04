@@ -1,0 +1,55 @@
+name: labeling-pull-request
+
+on:
+  pull_request
+
+jobs:
+  labeling-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull-request codes
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: labeling by contained emojis
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const definedLabels =
+              await github.rest.issues.listLabelsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+            const labelAndPrefixes =
+              definedLabels.data
+              .filter((label) => label.name.includes(':'))
+              .map((label) => ([label.name.match(/((:[^:\s]+:)+):/)?.[1], label]))
+              .sort(([prev], [next]) => next.split(":").length - prev.split(":").length);
+
+            const commits =
+              await github.rest.pulls.listCommits({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number
+              });
+            const commitEmojis =
+              Array.from(new Set(
+                commits.data
+                .map(data => data.commit.message)
+                .filter(message => message.includes(':'))
+                .flatMap(message => message.match(/((:[^:\s]+:))/g))
+              ));
+
+            const labels =
+              commitEmojis
+                .map(emoji =>
+                  labelAndPrefixes.find(([labelPrefix]) => emoji.includes(labelPrefix))?.[1]
+                );
+
+            if (labels.length === 0) return;
+            github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels
+            });
