@@ -59,7 +59,7 @@ jobs:
                       pullRequest(number: $pull_number) {
                         closingIssuesReferences(first: 100) {
                           nodes {
-                            labels {
+                            labels(first: 100) {
                               nodes {
                                 name
                               }
