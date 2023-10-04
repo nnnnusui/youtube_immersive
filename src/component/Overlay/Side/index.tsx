@@ -87,11 +87,11 @@ export const Side = (
   });
 
   const nav = {
-    description: "#columns #primary ytd-watch-metadata",
+    description: "#columns ytd-watch-metadata",
     chat: "#columns #chat-container",
-    comments: "#columns #primary ytd-comments#comments",
-    playlist: "#columns #secondary ytd-playlist-panel-renderer",
-    related: "#columns #secondary #related",
+    comments: "#columns ytd-comments#comments",
+    playlist: "#columns ytd-playlist-panel-renderer",
+    related: "#columns #related",
   };
   const [visibleNav, setVisibleNav] = createSignal("description");
 
