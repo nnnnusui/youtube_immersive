@@ -75,17 +75,17 @@ jobs:
                   pull_number: context.payload.pull_request.number,
                 }
               )
-                ?.repository
-                ?.pullRequest
-                ?.closingIssuesReferences
-                ?.nodes
-                ?.flatMap((issue) => 
+                .repository
+                .pullRequest
+                .closingIssuesReferences
+                .nodes
+                .flatMap((issue) => 
                   issue
-                    ?.labels
-                    ?.nodes
-                    ?.flatMap((label) =>
+                    .labels
+                    .nodes
+                    .flatMap((label) =>
                       label
-                        ?.name
+                        .name
                     )
                 );
 
