@@ -24,8 +24,9 @@ jobs:
               });
             const labelAndPrefixes =
               definedLabels.data
-              .filter((label) => label.name.includes(':'))
-              .map((label) => ([label.name.match(/((:[^:\s]+:)+):/)?.[1], label]))
+              .map((label) => label.name)
+              .filter((name) => name.includes(':'))
+              .map((name) => ([name.match(/((:[^:\s]+:)+):/)?.[1], name]))
               .sort(([prev], [next]) => next.split(":").length - prev.split(":").length);
 
             const commits =
@@ -46,7 +47,8 @@ jobs:
               commitEmojis
                 .map(emoji =>
                   labelAndPrefixes.find(([labelPrefix]) => emoji.includes(labelPrefix))?.[1]
-                );
+                )
+                .filter(labelName => labelName);
 
             if (labels.length === 0) return;
             github.rest.issues.addLabels({
