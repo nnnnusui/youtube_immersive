@@ -10,8 +10,7 @@ const App: Component = () => {
   onMount(async () => {
     setStorage(await chrome.storage.local.get() as Persisted);
   });
-  onMount(
-    () => {
+  onMount(() => {
     chrome.storage.local.onChanged.addListener((changes) => {
       const newValue = Object.fromEntries(
         Object.entries(changes)
