@@ -6,6 +6,8 @@ on:
 jobs:
   labeling-pull-request:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - name: Check out pull-request codes
         uses: actions/checkout@v3
