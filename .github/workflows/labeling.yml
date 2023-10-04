@@ -57,7 +57,7 @@ jobs:
                   query getLinkedIssues($owner: String!, $repo: String!, $pull_number: Int!) {
                     repository(owner: $owner, name: $repo) {
                       pullRequest(number: $pull_number) {
-                        closingIssuesReferences {
+                        closingIssuesReferences(first: 100) {
                           nodes {
                             labels {
                               nodes {
