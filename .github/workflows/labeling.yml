@@ -51,7 +51,7 @@ jobs:
                     )?.[1]
                 );
 
-            const labelsFromLinkedIssues =
+            const labelsFromLinkedIssues = (
               await github.graphql(
                 `
                   query getLinkedIssues($owner: String!, $repo: String!, $pull_number: Int!) {
@@ -75,19 +75,20 @@ jobs:
                   pull_number: context.payload.pull_request.number,
                 }
               )
-                .repository
-                .pullRequest
-                .closingIssuesReferences
-                .nodes
-                .flatMap((issue) => 
-                  issue
-                    .labels
-                    .nodes
-                    .flatMap((label) =>
-                      label
-                        .name
-                    )
-                );
+            )
+              .repository
+              .pullRequest
+              .closingIssuesReferences
+              .nodes
+              .flatMap((issue) => 
+                issue
+                  .labels
+                  .nodes
+                  .flatMap((label) =>
+                    label
+                      .name
+                  )
+              );
 
             const labels = [
               ...labelsFromCommitEmojis,
