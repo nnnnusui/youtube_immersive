@@ -12,6 +12,7 @@
 				"sysoev.language-stylus",
 				"stylelint.vscode-stylelint",
 				"ygkn.storybook-opener",
+				"bierner.emojisense",
 				"eamodio.gitlens"
 			]
 		}
