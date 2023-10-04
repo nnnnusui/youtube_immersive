@@ -42,13 +42,58 @@ jobs:
                 .filter(message => message.includes(':'))
                 .flatMap(message => message.match(/((:[^:\s]+:))/g))
               ));
-
-            const labels =
+            const labelsFromCommitEmojis =
               commitEmojis
                 .map(emoji =>
-                  labelAndPrefixes.find(([labelPrefix]) => emoji.includes(labelPrefix))?.[1]
-                )
-                .filter(labelName => labelName);
+                  labelAndPrefixes
+                    .find(([labelPrefix]) => 
+                      emoji.includes(labelPrefix)
+                    )?.[1]
+                );
+
+            const labelsFromLinkedIssues =
+              await github.graphql(
+                `
+                  query getLinkedIssues($owner: String!, $repo: String!, $pull_number: Int!) {
+                    repository(owner: $owner, name: $repo) {
+                      pullRequest(number: $pull_number) {
+                        closingIssuesReferences {
+                          nodes {
+                            labels {
+                              nodes {
+                                name
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                `, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                }
+              )
+                ?.repository
+                ?.pullRequest
+                ?.closingIssuesReferences
+                ?.nodes
+                ?.flatMap((issue) => 
+                  issue
+                    ?.labels
+                    ?.nodes
+                    ?.flatMap((label) =>
+                      label
+                        ?.name
+                    )
+                );
+
+            const labels = [
+              ...labelsFromCommitEmojis,
+              ...labelsFromLinkedIssues,
+            ]
+              .filter(labelName => labelName);
 
             if (labels.length === 0) return;
             github.rest.issues.addLabels({
