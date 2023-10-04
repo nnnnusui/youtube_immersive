@@ -6,7 +6,6 @@ on:
 jobs:
   code-check:
     runs-on: ubuntu-latest
-    permissions: write-all
     steps:
       - name: Checkout (GitHub)
         uses: actions/checkout@v4
