@@ -9,6 +9,11 @@
     "dev": "pnpm /^dev:.*/",
     "dev:watch": "vite build --watch",
     "dev:storybook": "storybook dev -p 6006 --no-open",
+    "test": "echo no impl",
+    "lint": "pnpm /^lint:.*/",
+    "lint:ts": "tsc --skipLibCheck",
+    "lint:eslint": "eslint src",
+    "lint:stylelint": "stylelint \"**/*.styl\"",
     "build": "vite build",
     "serve": "vite preview"
   },
