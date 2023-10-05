@@ -7,6 +7,7 @@ import {
   createSignal, For, Show,
 } from "solid-js";
 
+import { getSideViewOptions } from "./getSideViewOptions";
 import styles from "./Side.module.styl";
 import { VisibilitySwitchOption } from "./VisibilitySwitchOption";
 
@@ -86,13 +87,22 @@ export const Side = (
     );
   });
 
-  const nav = {
+  const nav = getSideViewOptions({
     description: "#columns ytd-watch-metadata",
-    chat: "#columns #chat-container",
-    comments: "#columns ytd-comments#comments",
-    playlist: "#columns ytd-playlist-panel-renderer",
+    chat: {
+      target: "#columns #chat-container",
+      mustExist: ":scope ytd-live-chat-frame",
+    },
+    comments: {
+      target: "#columns ytd-comments#comments",
+      mustExist: ":scope ytd-comments-header-renderer",
+    },
+    playlist: {
+      target: "#columns ytd-playlist-panel-renderer",
+      mustExist: ":scope ytd-playlist-panel-video-renderer",
+    },
     related: "#columns #related",
-  };
+  });
   const [visibleNav, setVisibleNav] = createSignal("description");
 
   return (
@@ -157,11 +167,11 @@ export const Side = (
         >
           📌
         </button>
-        <For each={Object.entries(nav)}>{([name, selector]) => (
+        <For each={Object.entries(nav)}>{([name, viewOption]) => (
           <VisibilitySwitchOption
             class={styles.TabButton}
             label={<>{name}</>}
-            selector={selector}
+            viewOption={viewOption}
             visible={name === visibleNav()}
             onClick={() => setVisibleNav(name)}
           />
