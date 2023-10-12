@@ -1,7 +1,5 @@
 import { createEffect, createRoot, createSignal, onCleanup, onMount } from "solid-js";
 
-import { useRootObserver } from "./useRootObserver";
-
 const createInTheater = () => {
   const [inTheater, setInTheater] = createSignal(false);
   const [hasTheater, setHasTheater] = createSignal(false);
@@ -11,12 +9,16 @@ const createInTheater = () => {
   });
 
   // update `hasTheater`.
-  useRootObserver((addedNodes) => {
-    const finded = addedNodes.find((it) => it.id === "player-container");
-    if (!finded) return;
-    const hasTheater = finded.parentElement?.id === "player-full-bleed-container";
-    setHasTheater(hasTheater);
+  const [checkHasTheaterTaskId, setCheckHasTheaterTaskId] = createSignal<NodeJS.Timer>();
+  onMount(() => {
+    setCheckHasTheaterTaskId(
+      setInterval(() => {
+        const finded = document.querySelector("#player-full-bleed-container > #player-container");
+        setHasTheater(!!finded);
+      }, 300)
+    );
   });
+  onCleanup(() => clearInterval(checkHasTheaterTaskId()));
 
   // update `inWatch`
   const [checkInWatchTaskId, setCheckInWatchTaskId] = createSignal<NodeJS.Timer>();
@@ -26,7 +28,7 @@ const createInTheater = () => {
         const url = new URL(document.URL);
         const inWatch = url.pathname.endsWith("/watch");
         setInWatch(inWatch);
-      }, 100)
+      }, 300)
     )
   );
   onCleanup(() => clearInterval(checkInWatchTaskId()));
