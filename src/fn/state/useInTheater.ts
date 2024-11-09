@@ -9,7 +9,7 @@ const createInTheater = () => {
   });
 
   // update `hasTheater`.
-  const [checkHasTheaterTaskId, setCheckHasTheaterTaskId] = createSignal<NodeJS.Timer>();
+  const [checkHasTheaterTaskId, setCheckHasTheaterTaskId] = createSignal<NodeJS.Timeout>();
   onMount(() => {
     setCheckHasTheaterTaskId(
       setInterval(() => {
@@ -21,7 +21,7 @@ const createInTheater = () => {
   onCleanup(() => clearInterval(checkHasTheaterTaskId()));
 
   // update `inWatch`
-  const [checkInWatchTaskId, setCheckInWatchTaskId] = createSignal<NodeJS.Timer>();
+  const [checkInWatchTaskId, setCheckInWatchTaskId] = createSignal<NodeJS.Timeout>();
   onMount(() =>
     setCheckInWatchTaskId(
       setInterval(() => {
